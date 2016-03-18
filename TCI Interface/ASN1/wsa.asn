@@ -1,0 +1,199 @@
+/*--<OSS.PDU>--*/
+IEEE-1609-3-WSA {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wsa(3) version0(0)}
+DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN
+
+/* Qualtiy check info:
+Proper syntax and correct mapping of UPER on the intended binary presentation as specified in the main body of this document was validated with the OSS ASN.1 Studio tool.
+*/
+
+IMPORTS
+
+--CHANGED BY COC
+VarLengthNumber FROM TCI-CommonTypes
+--VarLengthNumber FROM CITSapplMgmtIDs {iso(1) standard(0) cits-applMgmt (17419) ids (1) version1 (1)}
+
+
+EXT-TYPE, Extension, RefExt, c-Reserved, c-RepeatRate,c-TxPowerUsed80211, c-2Dlocation, c-3Dlocation, c-advertiserID, c-IPv6Address, c-servicePort,c-EDCAparameterSet, c-ChannelAccess, c-SecondaryDNS, c-GatewayMACaddress,  c-ProviderMACaddress, c-RCPIthreshold, c-WSAcountThreshold, c-WSAcountThresInt, c-ProviderServContext, RepeatRate, TwoDLocation, ThreeDLocation, AdvertiserIdentifier, ProviderServiceContext, EdcaParameterSet, ChannelAccess80211, SecondaryDns,GatewayMacAddress, IPv6Address, TXpower80211, DataRate80211, ChannelNumber80211, ServicePort, ProviderMacAddress, RcpiThreshold, WsaCountThreshold, WsaCountThresholdInterval FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
+
+/* for information only
+PortNumber FROM CALMfntp { iso (1) standard (0) calm-nonip(29281) fntp(1) asnm-1 (1) version1 (1)} 
+*/
+;
+
+
+-- WSA message
+SrvAdvMsg ::= SEQUENCE { 
+	version 	SrvAdvPrtVersion, -- WSA version
+	body	SrvAdvBody
+	}
+
+SrvAdvPrtVersion ::= SEQUENCE{
+	messageID	SrvAdvMessageType, -- always set to 0
+	rsvAdvPrtVersion	RsvAdvPrtVersion -- Set to c-rsvAdvPrtVersionNo
+	}
+
+RsvAdvPrtVersion ::= INTEGER (0..7) -- Protocol version
+
+-- Version number indicating the WSA specification in this document
+c-rsvAdvPrtVersionNo	INTEGER (0..7)::=3 -- actual version number of WSA
+
+SrvAdvMessageType ::= INTEGER{
+	saMessage	(0), -- WSA message in IEEE 1609.3, SAM in ISO 24102-5
+	sarMessage	(1) -- SAR message used in ISO 24102-5
+	} (0..1)
+
+SrvAdvBody ::= SEQUENCE{
+	changeCount	SrvAdvChangeCount,
+	extensions	SrvAdvMsgHeaderExts OPTIONAL,
+	serviceInfos	ServiceInfos OPTIONAL,
+	channelInfos	ChannelInfos OPTIONAL,
+	routingAdvertisement	RoutingAdvertisement OPTIONAL
+	}
+	
+
+SrvAdvChangeCount ::= SEQUENCE{
+	saID	SrvAdvID,
+	contentCount	SrvAdvContentCount
+	}
+
+SrvAdvID ::= INTEGER(0..15)
+
+SrvAdvContentCount ::= INTEGER(0..15)
+	
+
+
+-- WSA header extensions
+SrvAdvMsgHeaderExts::= SEQUENCE OF SrvAdvMsgHeaderExt
+
+SrvAdvMsgHeaderExt ::= Extension {{SrvAdvMsgHeaderExtTypes}}
+
+SrvAdvMsgHeaderExtTypes EXT-TYPE ::= {
+	{ RepeatRate 	IDENTIFIED BY c-RepeatRate } |
+	{ TwoDLocation 	IDENTIFIED BY c-2Dlocation } |
+	{ ThreeDLocation IDENTIFIED BY c-3Dlocation} |
+	{ AdvertiserIdentifier 	IDENTIFIED BY c-advertiserID } ,
+	...
+	}
+
+
+-- Service Info List
+ServiceInfos ::= SEQUENCE OF ServiceInfo -- '0' size allows to send only a routing advertisement
+
+ServiceInfo ::= SEQUENCE {
+	serviceID	VarLengthNumber, -- PSID
+	channelIndex	ChannelIndex, -- 5 bits
+	chOptions	ChannelOptions 
+	}
+
+ChannelOptions ::= SEQUENCE{
+	mandApp	MandApp OPTIONAL, -- in WSA set to '0'b
+	serviceProviderPort	ReplyAddress OPTIONAL, -- in WSA set to '0'b
+	extensions	ServiceInfoExts OPTIONAL 
+	}
+	
+
+ChannelIndex ::= INTEGER {
+	notUsed	(0), -- ChannelInfos is not used 
+	firstEntry	(1)
+	}(0..31)
+
+/* For information: ISO definition
+ReplyAddress ::= PortNumber -- when not present PSID is used for source and destination
+*/
+-- Dummy ReplyAddress as long as port numbers are not used
+ReplyAddress ::= NULL -- never used
+
+-- Dummy MandApp as long as this feature is not used
+MandApp ::= NULL
+
+-- Service Info Extensions
+ServiceInfoExts ::= SEQUENCE OF ServiceInfoExt
+
+ServiceInfoExt ::= Extension {{ServiceInfoExtTypes}}
+
+ServiceInfoExtTypes EXT-TYPE ::= {
+	{ ProviderServiceContext	IDENTIFIED BY c-ProviderServContext } |
+	{ IPv6Address	IDENTIFIED BY c-IPv6Address } |
+	{ ServicePort	IDENTIFIED BY c-servicePort} |
+	{ ProviderMacAddress	IDENTIFIED BY c-ProviderMACaddress } |
+	{ RcpiThreshold	IDENTIFIED BY c-RCPIthreshold } |
+	{ WsaCountThreshold	IDENTIFIED BY c-WSAcountThreshold } |
+	{ WsaCountThresholdInterval IDENTIFIED BY c-WSAcountThresInt },
+	...
+	}
+
+
+-- Channel Info List
+ChannelInfos ::= SEQUENCE OF ChannelInfo
+
+ChannelInfo ::= SEQUENCE{
+	operatingClass	OperatingClass80211,
+	channelNumber	ChannelNumber80211,
+	powerLevel	TXpower80211,
+	dataRate	WsaChInfoDataRate,
+	extensions	ChInfoOptions
+	}
+
+OperatingClass80211 ::= INTEGER (0..255)
+
+WsaChInfoDataRate ::= SEQUENCE{
+	adaptable	BIT STRING (SIZE(1)),
+	dataRate	INTEGER (0..127)
+	}
+
+ChInfoOptions ::= SEQUENCE{
+	option1	NULL OPTIONAL, -- not used
+	option2	NULL OPTIONAL, -- not used
+	option3	NULL OPTIONAL, -- not used
+	option4	NULL OPTIONAL, -- not used
+	option5	NULL OPTIONAL, -- not used
+	option6	NULL OPTIONAL, -- not used
+	option7	NULL OPTIONAL, -- not used
+	extensions	ChannelInfoExts OPTIONAL
+	} -- this is the one octet "Channel Info Option Indicator"
+
+
+-- Channel Info extensions
+ChannelInfoExts ::= SEQUENCE OF ChannelInfoExt
+
+ChannelInfoExt ::= Extension {{ChannelInfoExtTypes}}
+
+ChannelInfoExtTypes EXT-TYPE ::= {
+	{ EdcaParameterSet	IDENTIFIED BY c-EDCAparameterSet } |
+	{ ChannelAccess80211 IDENTIFIED BY c-ChannelAccess },
+	...
+	}
+
+
+-- Routing Advertisement
+RoutingAdvertisement ::= SEQUENCE {
+	lifetime	RouterLifetime,
+	ipPrefix	IpV6Prefix,
+	ipPrefixLength	IpV6PrefixLength,
+	defaultGateway	IPv6Address,
+	primaryDns	IPv6Address,
+	extensions	RoutAdvertExts
+	}
+
+RouterLifetime ::= INTEGER (0..65535)
+
+IpV6Prefix ::= OCTET STRING (SIZE (16))
+
+IpV6PrefixLength ::= INTEGER (0..255)
+
+
+-- Routing Advertisement extensions
+RoutAdvertExts ::= SEQUENCE OF RoutAdvertExt
+
+RoutAdvertExt ::= Extension {{RoutAdvertExtTypes}}
+
+RoutAdvertExtTypes EXT-TYPE ::= {
+	{ SecondaryDns	IDENTIFIED BY c-SecondaryDNS } |
+	{ GatewayMacAddress	IDENTIFIED BY c-GatewayMACaddress },
+	...
+	}
+
+
+END
+

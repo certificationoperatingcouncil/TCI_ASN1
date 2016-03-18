@@ -1,0 +1,102 @@
+TCI-16092
+DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN
+
+IMPORTS
+Exception, 
+MsgID, 
+Response  FROM TCI-CommonTypes
+
+SetInitialState, 
+SetWsmTxInfo, 
+StartWsmTx, 
+StopWsmTx, 
+StartWsaTxPerdiodic, 
+StopWsaTxPeriodic, 
+StartWsmRx, 
+StopWsmRx, 
+SignerIdentifierType  FROM TCI-wsm
+
+Indication FROM TCI-indication
+; 
+
+TCI16092 ::= CHOICE{
+	request			[0]	Request,
+	response		[1]	Response,
+	indication 		[2] Dot2Indication,
+--	responseInfo	[3]	ResponseInfo, 	not used in 1609.2
+	exception		[4] Exception,
+	...
+	}
+
+Request ::=  SEQUENCE {
+	 messageId  MESSAGE-ID-AND-TYPE.&id({MessageTypes}),
+	 value          MESSAGE-ID-AND-TYPE.&Type({MessageTypes}{@.messageId}),
+	 ...
+	 }
+
+MESSAGE-ID-AND-TYPE ::= CLASS {
+	 &id            MsgID UNIQUE,
+	 &Type
+	 } WITH SYNTAX  {&Type IDENTIFIED BY &id}
+
+MessageTypes MESSAGE-ID-AND-TYPE ::= {
+	{ SetWsmTxInfo IDENTIFIED BY setWsmTxInfo} |
+	{ StartWsmTx IDENTIFIED BY startWsmTx} |
+	{ StopWsmTx IDENTIFIED BY stopWsmTx} |
+	{ StartWsaTxPerdiodic IDENTIFIED BY startWsaTxPerdiodic} |
+	{ StopWsaTxPeriodic IDENTIFIED BY stopWsaTxPeriodic} |
+	{ StartWsmRx IDENTIFIED BY startWsmRx} |
+	{ StopWsmRx IDENTIFIED BY stopWsmRx} |
+	{ SetInitialState IDENTIFIED BY setInitialState } 
+ }
+
+	setInitialState                     MsgID ::= 1
+	setWsmTxInfo				        MsgID ::= 2
+	startWsmTx							MsgID ::= 3
+	stopWsmTx		     				MsgID ::= 4
+	startWsaTxPerdiodic     			MsgID ::= 5
+	stopWsaTxPeriodic     				MsgID ::= 6
+	startWsmRx     						MsgID ::= 7
+	stopWsmRx  							MsgID ::= 8
+
+/* 
+    Request Messages
+
+	SetInitialState, 	initialize system at the beginning of each test case. 
+	SetWsmTxInfo,  configure WSM parameters for radio and security
+	StartWsmTx, 	trigger to start sending signed WSM.
+	StopWsmTx, 		stop transmissions of the WSM
+	StartWsmRx, 
+	StopWsmRx, 		stop transmissions of the WSA
+	StartWsaTxPerdiodic, 
+	StopWsaTxPeriodic FROM TCI-wsm
+
+ To transmit WSA with parameters for radio and security
+
+	SetWsmTxInfo 		FROM TCI-16093
+	StartWsaTxPerdiodic	FROM TCI-16093
+or 
+	SetWsmTxInfo 		FROM TCI-16093
+	StartWsmTx			FROM TCI-16093, 
+		WSA provided as Opaque payload already signed by TS, then securityContext-> ContentType =mIeee16092Data
+	or	
+		WSA provided as Opaque WSA data to be signed by SUT, then securityContext-> ContentType =mWSA, SignerIdentifierType = useSecProfilePerContentType
+*/
+
+/* 
+   Indication Messages
+*/
+
+Dot2Indication ::= Indication (WITH COMPONENTS {
+	radio,
+	event (	eDot2VerificationCompleteWithResult | 
+			exception),
+	eventParams	( WITH COMPONENTS {wsm}
+				 ) OPTIONAL,
+	pdu	OPTIONAL,
+	exception OPTIONAL
+	})
+
+
+END

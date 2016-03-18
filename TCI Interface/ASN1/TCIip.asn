@@ -1,0 +1,79 @@
+TCI-ip
+DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN
+
+IMPORTS
+RepeatRate, 
+IpAddress, 
+IpPort, 
+Opaque, 
+RadioInterface FROM TCI-CommonTypes
+
+EventHandling FROM TCI-eventHandling
+;
+
+GetIPv6InterfaceInfo ::= SEQUENCE{
+	radio				RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
+	...
+}
+
+SetIPv6Address ::= SEQUENCE{		-- WME-AddressChange.request
+	radio				RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
+	interfaceName		UTF8String(SIZE(1..255)),
+	ipAddress			IpAddress OPTIONAL, 
+	-- optional if the new IPv6 address value must be selected at random
+	...
+}
+
+StartIPv6Tx ::= SEQUENCE{
+	radio				RadioInterface,
+	interfaceName		UTF8String(SIZE(1..255)),
+	destIpAddress		IpAddress,
+	destPort			IpPort OPTIONAL,
+	protocol			ENUMERATED { tcp, udp, icmp },
+	repeatRate      	RepeatRate OPTIONAL,
+	eventHandling       EventHandling  (WITH COMPONENTS {..., eventFlag ('000000000'B) }) OPTIONAL,
+	payload		    	Opaque OPTIONAL,
+	...
+}
+ 
+StopIPv6Tx ::= StartIPv6Tx (WITH COMPONENTS {
+	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+	interfaceName,
+	destIpAddress,
+	destPort,
+	protocol,
+	repeatRate ABSENT,
+	eventHandling ABSENT,
+	payload ABSENT
+})
+
+SendIPv6Ping ::= StartIPv6Tx ( WITH COMPONENTS {
+	radio,
+	interfaceName,
+	destIpAddress,
+	destPort ABSENT,
+	protocol (icmp),
+	repeatRate OPTIONAL,
+	eventHandling	(WITH COMPONENTS {..., eventFlag ({eIcmp6PktRx}) }),
+	payload ABSENT
+	})
+
+StartIPv6Rx ::= SEQUENCE{
+	radio				RadioInterface,
+	interfaceName		UTF8String(SIZE(1..255)),
+	listenPort			IpPort,
+	protocol			ENUMERATED { tcp (0), udp (1) },
+	eventHandling		EventHandling (WITH COMPONENTS {..., eventFlag ({eIpv6PktRx}) }) OPTIONAL,
+	...
+}
+
+StopIPv6Rx ::= StartIPv6Rx ( WITH COMPONENTS {
+	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+	interfaceName,
+	listenPort,
+	protocol,
+	eventHandling ABSENT
+})
+
+END

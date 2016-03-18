@@ -1,0 +1,47 @@
+TCI-SutControl
+
+DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+IMPORTS
+Response, 
+IpPort, 
+MsgID, 
+Exception FROM TCI-CommonTypes
+
+;
+
+TCISutControl ::= CHOICE{
+	request			[0]	Request,
+	response		[1]	Response,
+	exception		[4] Exception,
+	...
+	} 
+
+MESSAGE-ID-AND-TYPE ::= CLASS {
+   &id    MsgID UNIQUE,
+   &Type
+   } WITH SYNTAX {&Type IDENTIFIED BY &id}
+
+Request ::=  SEQUENCE {
+   messageId   MESSAGE-ID-AND-TYPE.&id({MessageTypes}),
+   value       MESSAGE-ID-AND-TYPE.&Type({MessageTypes}{@.messageId}),
+   ...
+   }
+
+MessageTypes MESSAGE-ID-AND-TYPE ::= {
+	{ Shutdown	IDENTIFIED BY shutdown } |
+	{ Restart IDENTIFIED BY restart} |
+	{ RequestDeviceAvailability IDENTIFIED BY requestDeviceAvailability}
+}
+
+shutdown      				MsgID ::= 1
+restart    					MsgID ::= 2
+requestDeviceAvailability 	MsgID ::= 3
+
+Shutdown ::= BOOLEAN (TRUE)
+
+Restart ::= BOOLEAN (TRUE)
+
+RequestDeviceAvailability ::= BOOLEAN (TRUE)
+
+END

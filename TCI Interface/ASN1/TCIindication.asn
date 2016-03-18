@@ -1,0 +1,142 @@
+--OSS.PDU TCI-16093.TSI16093Event>--
+TCI-indication
+DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN
+
+IMPORTS
+ChannelNumber80211, 
+TXpower80211, 
+MACaddress FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
+
+PduType, 
+PduData, 
+RCPI, 
+TimeSlot, 
+DataRate, 
+RepeatRate, 
+UserPriority, 
+Opaque, 
+HashedId8, 
+Exception, 
+RadioInterface, 
+Psid, 
+Time64, 
+IpPort, 
+IpAddress, 
+MsgID FROM TCI-CommonTypes
+;
+
+/* 
+   Indication Messages
+*/
+Indication ::= SEQUENCE{
+	radio                   RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }), 	
+	event					Event,			
+	eventParams				EventParams OPTIONAL,
+	pdu						Pdu OPTIONAL,
+	exception				Exception OPTIONAL,
+	...
+}
+
+Event ::= ENUMERATED {
+	e80211PktRx							(1),	-- set 1 to be notified when 802.11 frame is received
+	e16093PktRx							(2), 	-- inbound 1603 frame received
+	eWsmPktRx							(3), 	-- WSM received (after PSID match filtering)
+	eIpv6PktRx							(4), 	-- inbound IPv6 frame received
+	eIcmp6PktRx							(5),	-- inbound ICMP frame received
+	eIpv6ConfigChanged					(6),	-- IPv6 address configuration changed
+	eDot3ChannelAssigned				(7),	-- Channel assigned as per WME-Notification.indication
+	eDot3RequestMatchedAvailAppService	(8),	-- request matched with available application-service as per WME-Notification.indication
+	eDot2VerificationCompleteWithResult (9),	-- message signature verification is complete
+	exception							(15) 	-- exception reported from IUT
+}
+
+EventParams ::= CHOICE{
+	service			[0]		ServiceParameters,
+	wsm 		 	[1]  	WsmParameters,
+	ip			 	[2]		IpParameters,
+	d80211frame		[3]		D80211Parameters,
+	security		[4]		SecResultParams,
+	...
+}
+
+Pdu ::= SEQUENCE {
+	pduType		PduType,
+	pduData		PduData,
+	...
+}
+
+ServiceParameters ::= SEQUENCE{ -- used in EventParams
+	psid					SEQUENCE OF Psid,
+	...
+}
+
+WsmParameters ::= SEQUENCE{	-- used in EventParams			
+	psid					Psid,
+	radio					RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
+	wsmpVersion				INTEGER(0..15),
+	channelIdentifier		ChannelNumber80211,
+	timeslot				TimeSlot,
+	dataRate				DataRate,
+	receivePowerLevel		TXpower80211,
+	sourceMACAddr			MACaddress,
+	...
+}
+
+IpParameters ::= SEQUENCE{ -- used in EventParams
+	interfaceName			UTF8String(SIZE(1..255)),
+	sourceIPaddress			IpAddress,
+	...
+}
+
+D80211Parameters ::= SEQUENCE{ -- used in EventParams
+	radio					RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
+	rcpi					RCPI,
+	...
+}
+
+SecResultParams ::= SEQUENCE { -- used in EventParams
+	securityResultCode		SecurityResultCode,
+	description				OCTET STRING OPTIONAL,
+	...
+} 
+
+SecurityResultCode ::= ENUMERATED {		-- from dot3
+	success(1), 
+	inconsistentInputParameters(2), 
+	spduParsingInvalidInput(3), 
+	spduParsingUnsupportedCriticalInformationField(4),
+	spduParsingCertificateNotFound(5), 
+	spduParsingGenerationTimeNotAvailable(6), 
+	spduParsingGenerationLocationNotAvailable(7), 
+	spduCertificateChainNotEnoughInformationToConstructChain(8), 
+	spduCertificateChainChainEndedAtUntrustedRoot(9), 
+	spduCertificateChainChainWasTooLongForImplementation(10), 
+	spduCertificateChainCertificateRevoked(11), 
+	spduCertificateChainOverdueCRL(12), 
+	spduCertificateChainInconsistentExpiryTimes(13), 
+	spduCertificateChainInconsistentStartTimes(14), 
+	spduCertificateChainInconsistentChainPermissions(15), 
+	spduCryptoVerificationFailure(16), 
+	spduConsistencyFutureCertificateAtGenerationTime(17), 
+	spduConsistencyExpiredCertificateAtGenerationTime(18), 
+	spduConsistencyExpiryDateTooEarly(19), 
+	spduConsistencyExpiryDateTooLate(20), 
+	spduConsistencyGenerationLocationOutsideValidityRegion(21), 
+	spduConsistencyNoGenerationLocation(22), 
+	spduConsistencyUnauthorizedPSID(23), 
+	spduInternalConsistencyExpiryTimeBeforeGenerationTime(24), 
+	spduInternalConsistencyextDataHashDoesntMatch(25), 
+	spduInternalConsistencynoExtDataHashProvided(26), 
+	spduInternalConsistencynoExtDataHashPresent(27), 
+	spduLocalConsistencyPSIDsDontMatch(28), 
+	spduLocalConsistencyChainWasTooLongForSDEE(29), 
+	spduRelevanceGenerationTimeTooFarInPast(30), 
+	spduRelevanceGenerationTimeTooFarInFuture(31), 
+	spduRelevanceExpiryTimeInPast(32), 
+	spduRelevanceGenerationLocationTooDistant(33), 
+	spduRelevanceReplayedSpdu(34),
+	spduCertificateExpired (35)
+}
+
+END

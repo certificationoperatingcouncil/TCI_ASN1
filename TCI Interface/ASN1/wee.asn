@@ -1,0 +1,153 @@
+/*--<OSS.PDU>--*/
+IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
+DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN
+
+/* Quality check info:
+Proper syntax and correct mapping of UPER on the intended binary presentation as specified in the main body of this document was validated with the OSS ASN.1 Studio tool.
+*/
+
+IMPORTS
+
+;
+
+-- WAVE Extension Elements CLASS and reference value definitions 
+-- CLASS
+EXT-TYPE ::= CLASS {
+      &extRef RefExt UNIQUE,
+      &ExtValue
+	}
+	WITH SYNTAX {&ExtValue IDENTIFIED BY &extRef}
+
+-- General extension (profiling)
+Extension {EXT-TYPE : ExtensionTypes} ::= SEQUENCE {
+	extensionId	EXT-TYPE.&extRef({ExtensionTypes}),
+	value	EXT-TYPE.&ExtValue({ExtensionTypes}{@.extensionId})
+	}
+-- ExtensionTypes are specified for WSA and WSM
+
+-- Reference values (for all types of extensions)
+RefExt::=INTEGER (0..255)
+
+c-Reserved	RefExt ::= 0
+c-TxPowerUsed80211	RefExt ::= 4 -- WSM
+c-2Dlocation	RefExt ::= 5 -- WSA Header
+c-3Dlocation	RefExt ::= 6 -- WSA Header
+c-advertiserID	RefExt ::= 7 -- WSA Header
+c-ProviderServContext	RefExt ::= 8 -- WSA Service Info
+c-IPv6Address	RefExt ::= 9 -- WSA Service Info
+c-servicePort	RefExt ::= 10 -- WSA Service Info
+c-ProviderMACaddress	RefExt ::= 11 -- WSA Service Info
+c-EDCAparameterSet	RefExt ::= 12 -- WSA Channel Info
+c-SecondaryDNS	RefExt ::= 13 -- WSA Routing Advertisement
+c-GatewayMACaddress	RefExt ::= 14 -- WSA Routing Advertisement
+c-ChannelNumber80211	RefExt ::= 15 -- WSM
+c-DataRate80211	RefExt ::= 16 -- WSM
+c-RepeatRate	RefExt ::= 17 -- WSA Header
+c-RCPIthreshold	RefExt ::= 19 -- WSA Service Info
+c-WSAcountThreshold	RefExt ::= 20 -- WSA Service Info
+c-ChannelAccess	RefExt ::= 21 -- WSA Channel Info
+c-WSAcountThresInt	RefExt ::= 22 -- WSA Service Info
+c-ChannelLoad 	RefExt ::= 23 -- WSM-N-Header. 
+-- ChannelLoad is not specified in this standard.
+-- reserved for ISO	RefExt in the range 80 to 120
+-- all other values of RefExt are reserved
+
+
+-- WSM extension elements
+
+DataRate80211::=INTEGER(0..255)
+
+TXpower80211::=INTEGER(-128..127)
+
+ChannelNumber80211::=INTEGER(0..255)
+
+
+--WSA message header extension elements
+
+RepeatRate ::= INTEGER (0..255)
+
+TwoDLocation ::= SEQUENCE {
+	latitude 	Latitude,
+	longitude 	Longitude
+	}
+
+ThreeDLocation ::= SEQUENCE {
+	latitude 	Latitude,
+	longitude 	Longitude,
+	elevation	Elevation
+	}
+
+-- max. 32 octets are allowed in AdvertiserIdentifier!!!
+-- The 32 characters may produce more than 32 octets in UPER
+AdvertiserIdentifier ::= UTF8String (SIZE (1..32))
+
+
+--ServiceInfo extension elements
+-- Note: The size constraint has to be (0..255) although the PSC may
+-- consist of maximum 31 octets!
+-- ProviderServiceContext ::= OCTET STRING(SIZE(0..255)) 
+-- alternatively in order to get the size constraint checking
+ProviderServiceContext ::= SEQUENCE{
+    fillBit	BIT STRING (SIZE(3)), -- all bits set to zero!
+    psc	OCTET STRING (SIZE(0..31)) -- size zero is not recommended
+    }
+	
+
+IPv6Address ::= OCTET STRING (SIZE (16))
+
+ServicePort ::= INTEGER (0..65535)
+
+ProviderMacAddress ::= MACaddress
+
+MACaddress ::= OCTET STRING (SIZE(6))
+
+RcpiThreshold ::= INTEGER (0..255) -- see IEEE Std 802.11
+
+WsaCountThreshold ::= INTEGER (0..255)
+
+WsaCountThresholdInterval ::= INTEGER (0..255) -- value 0 is not used
+
+
+--ChannelInfo extension elements
+EdcaParameterSet ::= SEQUENCE{
+	acbeRecord	EdcaParameterRecord,
+	acbkRecord	EdcaParameterRecord,
+	acviRecord	EdcaParameterRecord,
+	acvoRecord	EdcaParameterRecord
+	}
+
+EdcaParameterRecord ::= SEQUENCE {
+	res	INTEGER (0..1),
+	aci	INTEGER (0..3),
+	acm 	INTEGER (0..1),
+	aifsn	INTEGER (0..15),
+	ecwMax	INTEGER (0..15),
+	ecwMin	INTEGER (0..15),
+	txopLimit	INTEGER (0..65535)
+	}
+
+ChannelAccess80211 ::= INTEGER {
+	continuous	(0),
+	alternatingSCH	(1),
+	alternatingCCH	(2)
+} (0..255)
+
+
+--RoutingAdvertisement extension elements
+
+SecondaryDns ::= IPv6Address
+
+GatewayMacAddress ::= MACaddress
+
+Latitude ::= SEQUENCE{
+	fill	BIT STRING (SIZE(1)), -- set to '0' (MSB of Latitude)
+	lat     INTEGER (-900000000..900000001) -- in 0,1 micro degree
+	}
+
+Longitude ::= INTEGER (-1800000000..1800000001)
+
+Elevation ::= INTEGER (-4096..61439)
+
+
+END

@@ -1,0 +1,146 @@
+TCI-16094
+DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN
+
+IMPORTS
+Response, 
+Exception, 
+MsgID FROM TCI-CommonTypes
+
+SetInitialState, 
+SetWsmTxInfo, 
+StartWsmTx, 
+StopWsmTx, 
+StartWsmRx, 
+StopWsmRx FROM TCI-wsm
+
+GetIPv6InterfaceInfo, 
+StartIPv6Tx, 
+StopIPv6Tx, 
+StartIPv6Rx, 
+StopIPv6Rx, 
+SetIPv6Address, 
+SendIPv6Ping FROM TCI-ip
+
+ResponseInfo, 
+Ipv6InterfaceInfo FROM TCI-responseInfo
+
+Indication FROM TCI-indication
+
+GetMib FROM TCI-mib
+;
+
+TCI16094 ::= CHOICE{
+	request			[0]	Request,
+	response		[1]	Response,
+	indication 		[2] Dot4Indication,
+	responseInfo	[3]	Dot4ResponseInfo,
+	exception		[4] Exception,
+	...
+	} 
+
+Request ::=  SEQUENCE {
+   messageId   MESSAGE-ID-AND-TYPE.&id({MessageTypes}),
+   value       MESSAGE-ID-AND-TYPE.&Type({MessageTypes}{@.messageId}),
+   ...
+   }
+
+MESSAGE-ID-AND-TYPE ::= CLASS {
+   &id    MsgID UNIQUE,
+   &Type
+   } WITH SYNTAX {&Type IDENTIFIED BY &id}
+
+MessageTypes MESSAGE-ID-AND-TYPE ::= {
+-- imported from TCI-wsm
+	{ SetInitialState IDENTIFIED BY setInitialState} |
+	{ SetWsmTxInfo IDENTIFIED BY setWsmTxInfo} |
+	{ StartWsmTx IDENTIFIED BY startWsmTx} |
+	{ StopWsmTx IDENTIFIED BY stopWsmTx} |
+	{ StartWsmRx IDENTIFIED BY startWsmRx} |
+	{ StopWsmRx IDENTIFIED BY stopWsmRx} |
+-- imported from TCI-mib module
+	{ GetDot4Mib IDENTIFIED BY getDot4Mib} |
+-- imported from TCI-ip module
+	{ GetIPv6InterfaceInfo IDENTIFIED BY getIpv6InterfaceInfo} |
+	{ SetIPv6Address IDENTIFIED BY setIpv6Address} |
+	{ SendIPv6Ping IDENTIFIED BY sendIpv6Ping} |
+	{ StartIPv6Tx IDENTIFIED BY startIPv6Tx} |
+	{ StopIPv6Tx IDENTIFIED BY stopIPv6Tx} |
+	{ StartIPv6Rx IDENTIFIED BY startIPv6Rx} |
+	{ StopIPv6Rx IDENTIFIED BY stopIPv6Rx}
+}
+
+setInitialState     	MsgID ::= 1
+setWsmTxInfo     		MsgID ::= 2
+startWsmTx     			MsgID ::= 3
+stopWsmTx		     	MsgID ::= 4
+startWsmRx     			MsgID ::= 5
+stopWsmRx     			MsgID ::= 6
+getDot4Mib				MsgID ::= 7
+getIpv6InterfaceInfo	MsgID ::= 8
+setIpv6Address			MsgID ::= 9
+sendIpv6Ping			MsgID ::= 10
+startIPv6Tx				MsgID ::= 11
+stopIPv6Tx				MsgID ::= 12
+startIPv6Rx				MsgID ::= 13
+stopIPv6Rx				MsgID ::= 14
+
+/* 
+   Request Messages
+
+	SetInitialState, 
+	SetWsmTxInfo, 
+	StartWsmTx, 
+	StopWsmTx, 
+	StartWsmRx, 
+	StopWsmRx FROM TCI-wsm
+
+	GetIPv6InterfaceInfo, 
+	StartIPv6Tx, 
+	StopIPv6Tx, 
+	StartIPv6Rx, 
+	StopIPv6Rx, 
+	SetIPv6Address, 
+	SendIPv6Ping FROM TCI-ip
+*/
+
+GetDot4Mib ::= GetMib (WITH COMPONENTS {
+	radio,
+	mib (WITH COMPONENTS {dot4Mib})
+	})
+
+/* 
+   ResponseInfo Messages
+*/
+
+Dot4ResponseInfo ::= ResponseInfo (WITH COMPONENTS {
+	msgID,	
+	resultCode,
+	info (WITH COMPONENTS { 
+		dot4MibInfo}  ) OPTIONAL, -- if exception reported, no InfoContent provided
+	exception OPTIONAL
+	})
+
+/* 
+   Indication Messages
+*/
+
+Dot4Indication ::= Indication (WITH COMPONENTS {
+	radio,
+	event (	e16093PktRx | 
+			eWsmPktRx | 
+			eIpv6PktRx | 
+			eIcmp6PktRx | 
+			eIpv6ConfigChanged | 
+			eDot3ChannelAssigned | 
+			eDot3RequestMatchedAvailAppService | 
+			exception),
+	eventParams	(WITH COMPONENTS {service} |
+				 WITH COMPONENTS {wsm} |
+				 WITH COMPONENTS {ip}
+				 ) OPTIONAL,
+	pdu	OPTIONAL,
+	exception OPTIONAL
+	})
+
+END

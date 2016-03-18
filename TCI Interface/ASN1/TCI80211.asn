@@ -1,0 +1,95 @@
+TCI-80211
+DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN
+
+IMPORTS
+Response, 
+Exception, 
+MsgID FROM TCI-CommonTypes
+
+SetInitialState, 
+StartWsmTx, 
+StopWsmTx, 
+StartWsmRx, 
+StopWsmRx  FROM TCI-wsm
+
+GetMib FROM TCI-mib
+
+ResponseInfo FROM TCI-responseInfo
+
+Indication FROM TCI-indication
+;
+
+TCI80211 ::= CHOICE{
+	request			[0]	Request,
+	response		[1]	Response,
+	indication 		[2] Dot11Indication,
+	responseInfo	[3]	Dot11ResponseInfo,
+	exception		[4] Exception,
+	...
+	} 
+
+Request ::=  SEQUENCE {
+   messageId   MESSAGE-ID-AND-TYPE.&id({MessageTypes}),
+   value       MESSAGE-ID-AND-TYPE.&Type({MessageTypes}{@.messageId}),
+   ...
+   }
+
+
+MESSAGE-ID-AND-TYPE ::= CLASS {
+   &id    MsgID UNIQUE,
+   &Type
+   } WITH SYNTAX {&Type IDENTIFIED BY &id}
+
+
+MessageTypes MESSAGE-ID-AND-TYPE ::= {
+-- imported from TCI-wsm
+	{ SetInitialState IDENTIFIED BY setInitialState} |
+	{ StartWsmTx IDENTIFIED BY startWsmTx} |
+	{ StopWsmTx IDENTIFIED BY stopWsmTx} |
+	{ StartWsmRx IDENTIFIED BY startWsmRx} |
+	{ StopWsmRx IDENTIFIED BY stopWsmRx} |
+-- imported from TCI-mib
+	{ GetDot11Mib IDENTIFIED BY getDot11Mib}
+}
+
+setInitialState     	MsgID ::= 1
+startWsmTx				MsgID ::= 2
+stopWsmTx				MsgID ::= 3
+startWsmRx				MsgID ::= 4
+stopWsmRx				MsgID ::= 5
+getDot11Mib				MsgID ::= 6
+
+/* 
+    Request Messages
+
+	SetInitialState, 
+	SetWsmTxInfo, 
+	StartWsmTx, 
+	StopWsmTx, 
+	StartWsmRx, 
+	StopWsmRx FROM TCI-wsm
+
+*/
+
+GetDot11Mib ::= GetMib (WITH COMPONENTS {
+	radio,
+	mib (WITH COMPONENTS {dot11Mib})
+	})
+
+Dot11ResponseInfo ::= ResponseInfo (WITH COMPONENTS {
+	msgID,	
+	resultCode,
+	info (WITH COMPONENTS { dot11MibInfo } ) OPTIONAL, -- if exception reported, no InfoContent provided
+	exception OPTIONAL
+	})
+
+Dot11Indication ::= Indication (WITH COMPONENTS {
+	radio,
+	event (e80211PktRx),
+	eventParams	(WITH COMPONENTS {d80211frame} ) OPTIONAL,
+	pdu	OPTIONAL,
+	exception OPTIONAL
+	})
+
+END

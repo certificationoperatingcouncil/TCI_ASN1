@@ -1,0 +1,39 @@
+TCI-mib
+DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN
+
+IMPORTS
+RadioInterface FROM TCI-CommonTypes
+;
+
+/* 
+	GetMib Section
+*/
+
+GetMib ::= SEQUENCE{
+	radio		RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
+	mib			CHOICE {
+		dot11Mib [0] Dot11Mib,
+		dot4Mib	 [1] Dot4Mib,
+		dot3Mib [2] Dot3Mib,
+		...
+		}	
+}
+
+Dot11Mib ::= ENUMERATED {
+	dot11PhyType,
+	dot11OCBActivated,
+	...
+}
+
+Dot4Mib ::= ENUMERATED {
+	dot4Capabilities,
+	...
+}
+
+Dot3Mib ::=  ENUMERATED {
+	dot3Capabilities,
+	...
+}
+
+END

@@ -1,0 +1,150 @@
+--OSS.PDU TCI-16093.TSI16093Event>--
+TCI-16093
+DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN
+
+IMPORTS
+Exception,
+Response, 
+MsgID FROM TCI-CommonTypes
+
+SetInitialState, 
+SetWsmTxInfo, 
+StartWsmTx, 
+StopWsmTx, 
+StartWsmRx, 
+StopWsmRx, 
+StartWsaTxPerdiodic, 
+StopWsaTxPeriodic, 
+AddWsaProviderService, 
+DelWsaProviderService, 
+AddUserService, 
+DelUserService FROM TCI-wsm
+
+GetIPv6InterfaceInfo, 
+SetIPv6Address, 
+SendIPv6Ping FROM TCI-ip
+
+ResponseInfo FROM TCI-responseInfo
+
+Indication FROM TCI-indication
+
+GetMib FROM TCI-mib
+;
+
+TCI16093 ::= CHOICE{
+	request			[0]	Request,
+	response		[1]	Response,
+	indication 		[2] Dot3Indication,
+	responseInfo	[3]	Dot3ResponseInfo,
+	exception		[4] Exception,
+	...
+	} 
+
+Request ::=  SEQUENCE {
+   messageId   MESSAGE-ID-AND-TYPE.&id({MessageTypes}),
+   value       MESSAGE-ID-AND-TYPE.&Type({MessageTypes}{@.messageId}),
+   ...
+   }
+
+MESSAGE-ID-AND-TYPE ::= CLASS {
+   &id    MsgID UNIQUE,
+   &Type
+   } WITH SYNTAX {&Type IDENTIFIED BY &id}
+
+MessageTypes MESSAGE-ID-AND-TYPE ::= {
+-- imported from TCI-wsm module
+	{ SetInitialState	IDENTIFIED BY setInitialState } |
+	{ SetWsmTxInfo IDENTIFIED BY setWsmTxInfo} |
+	{ StartWsmTx IDENTIFIED BY startWsmTx} |
+	{ StopWsmTx IDENTIFIED BY stopWsmTx} |
+	{ StartWsaTxPerdiodic IDENTIFIED BY startWsaTxPerdiodic} |
+	{ StopWsaTxPeriodic IDENTIFIED BY stopWsaTxPeriodic} |
+	{ StartWsmRx IDENTIFIED BY startWsmRx} |
+	{ StopWsmRx IDENTIFIED BY stopWsmRx} |
+	{ AddWsaProviderService IDENTIFIED BY addWsaProviderService} |
+	{ DelWsaProviderService IDENTIFIED BY delWsaProviderService} |
+	{ AddUserService IDENTIFIED BY addUserService} |
+	{ DelUserService IDENTIFIED BY delUserService} |
+-- imported from TCI-ip module
+	{ GetIPv6InterfaceInfo IDENTIFIED BY getIpv6InterfaceInfo} |
+	{ SetIPv6Address IDENTIFIED BY setIpv6Address} |
+	{ SendIPv6Ping IDENTIFIED BY sendIpv6Ping} |
+	{ GetDot3Mib IDENTIFIED BY getDot3Mib}
+}
+
+setInitialState     					MsgID ::= 1
+setWsmTxInfo     						MsgID ::= 2
+startWsmTx     							MsgID ::= 3
+stopWsmTx		     					MsgID ::= 4
+startWsaTxPerdiodic     				MsgID ::= 5
+stopWsaTxPeriodic     					MsgID ::= 6
+startWsmRx     							MsgID ::= 7
+stopWsmRx     							MsgID ::= 8
+addWsaProviderService		    		MsgID ::= 9
+delWsaProviderService		    		MsgID ::= 10
+addUserService							MsgID ::= 11
+delUserService							MsgID ::= 12
+getIpv6InterfaceInfo					MsgID ::= 13
+setIpv6Address							MsgID ::= 14
+sendIpv6Ping							MsgID ::= 15
+getDot3Mib								MsgID ::= 16
+
+/* 
+    Request Messages
+
+	SetInitialState, 
+	SetWsmTxInfo, 
+	StartWsmTx, 
+	StopWsmTx, 
+	StartWsmRx, 
+	StopWsmRx, 
+	StartWsaTxPerdiodic, 
+	StopWsaTxPeriodic, 
+	AddWsaProviderService, 
+	DelWsaProviderService, 
+	AddUserService, 
+	DelUserService FROM TCI-wsm
+*/
+
+GetDot3Mib ::= GetMib (WITH COMPONENTS {
+	radio,
+	mib (WITH COMPONENTS {dot3Mib})
+	})
+
+/* 
+   Indication Messages
+*/
+
+Dot3Indication ::= Indication (WITH COMPONENTS {
+	radio,
+	event (	e16093PktRx | 
+			eWsmPktRx | 
+			eIpv6PktRx | 
+			eIcmp6PktRx | 
+			eIpv6ConfigChanged | 
+			eDot3ChannelAssigned | 
+			eDot3RequestMatchedAvailAppService | 
+			eDot2VerificationCompleteWithResult | 
+			exception),
+	eventParams	(WITH COMPONENTS {service} |
+				 WITH COMPONENTS {wsm} |
+				 WITH COMPONENTS {ip}
+				 ) OPTIONAL,
+	pdu	OPTIONAL,
+	exception OPTIONAL
+	})
+
+/* 
+   ResponseInfo Messages
+*/
+
+Dot3ResponseInfo ::= ResponseInfo (WITH COMPONENTS {
+	msgID,	
+	resultCode,
+	info (WITH COMPONENTS { 
+		dot3MibInfo}  ) OPTIONAL, -- if exception reported, no InfoContent provided
+	exception OPTIONAL
+	})
+
+END

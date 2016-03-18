@@ -1,0 +1,114 @@
+TCI-CommonTypes
+DEFINITIONS AUTOMATIC TAGS ::= 
+BEGIN
+
+IMPORTS
+;
+
+PduData ::= Opaque
+PduType ::= ENUMERATED {
+	d80211frame			(1),	-- 802.11 frame (802.11 header, MAC header)
+	d16093frame			(2),	-- WSM frame, including WSM header & payload
+	d16092data			(3),	-- Ieee1609Data including 1609.3 payload
+	d16093payload		(4), 	-- 1609.3 payload excluding security header/footer
+	dIpv6payload		(5)		-- Ipv6 payload
+}
+
+Opaque ::= OCTET STRING(SIZE(0..2304))
+HashedId8  ::= OCTET STRING (SIZE(8))
+
+/* 
+   Response Messages with simple Result
+*/ 
+
+Response ::= SEQUENCE {
+	msgID 				MsgID,
+	resultCode			ResultCode,
+	exception			Exception OPTIONAL,
+	...
+}
+
+ResultCode ::= ENUMERATED {
+	rcSuccess (0), -- success
+	rcFailure (1)  -- failure
+}
+
+/* 
+	Exception Messages 
+*/
+Exception ::= SEQUENCE{
+	type		ExceptionType,
+	id			ExceptionId OPTIONAL,
+	module		Module OPTIONAL,	
+	description	ExceptionText OPTIONAL,
+	...
+}
+
+ExceptionType	::= ENUMERATED{
+	info,		-- all info messages
+	warning,	-- all warnings
+	error		-- all errors
+}
+
+Module ::= UTF8String (SIZE(0..255))
+-- Function/Module reporting an exception
+
+ExceptionId ::= INTEGER (0..65535)
+-- exception numerical identifier
+
+ExceptionText ::= UTF8String (SIZE(0..1200))
+-- short description of exception
+
+RadioInterface ::= SEQUENCE{
+	radio		Radio,
+	antenna		Antenna OPTIONAL
+}
+
+Radio ::= ENUMERATED {
+	radio0 (0),
+	radio1 (1),
+	radio2 (2),
+	radio3 (3)
+}
+
+Antenna ::= ENUMERATED {
+	antenna1 	(1),
+	antenna2 	(2),
+	both		(3)
+}
+
+DataRate ::= ENUMERATED {
+	-- see Table 9-5—Non-HT reference rate 802.11 - 2012 pp864
+	r6Mbps-12BPSK 	(11),
+	r9Mbps-34BPSK 	(15),
+	r12Mbps-12QPSK 	(10),
+	r18Mbps-34QPSK 	(14),
+	r24Mbps-1216QAM (9),
+	r36Mbps-3416QAM (13),
+	r48Mbps-2364QAM (8),
+	r54Mbps-3464QAM (12),
+	default (0),			--Use default data rate
+	trc (1)					--Use transmit rate control (currently unused)
+}
+
+TimeSlot ::= ENUMERATED {    -- consistent with dot3
+	alt-slot0 		(1),
+	alt-slot1 		(2),
+	continuous		(3)
+}
+
+RCPI ::= INTEGER (0..255)
+UserPriority ::= INTEGER(0..7)
+Time64 ::= INTEGER (0..9223372036854775807) 
+-- time expressed as the number of millicroseconds
+
+Psid ::= INTEGER (0..MAX)
+VarLengthNumber ::= Psid
+IpAddress ::= UTF8String(SIZE(2..255)) -- text string containing IPv6 (or IPv4 or hostname). Used as a parameter in WSA, IPv6 configuration, etc
+IpPort ::= INTEGER(0..65535)		-- UDP port used in WSA, in SetInitialState
+
+RepeatRate ::= INTEGER (0..255) -- Number of messages transmitted per 5sec interval; if set to 0, transmit message one time only
+
+MsgID ::=  INTEGER(0..255)
+
+END

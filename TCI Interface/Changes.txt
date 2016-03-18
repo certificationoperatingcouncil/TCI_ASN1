@@ -1,0 +1,53 @@
+TCI ASN.1 20160316
+- TCISutControl: removed comment causing compiler error
+- TCICommonTypes: changed comment regarding content of Time64 type
+- TCIwsm: fixed import references
+
+TCI ASN.1 20160315
+- TCISutControl: added RequestDeviceAvailability, removed Indication
+
+TCI ASN.1 20160314
+- 2945: merged SwRI changes
+- 2945: removed SetInitialState, import from TCIwsm
+- TCIwsm: changed ExpiryTime to used Time64
+- TCI16094: updated Dot4Indication
+- All modules: removed unnecessary IMPORTs
+- 1603: added dot3Mib
+
+TCI ASN.1 20160310
+- Accepted changes from Danlaw and SwRI
+- modified Time64
+- Extracted EventHandling into separate module
+- Some cleanup in TCIip. Changed parameter for eventHandling
+- Removed unnecessary imported types in TCIwsm
+
+TCI ASN.1 20160307
+- 2945: update from John Liming
+- 2945, TCI-wsm: updated SetInitialState
+
+TCI ASN.1 20160306
+- Major rework for all modules
+	new modules created: TCIip, TCImib, TCIwsm, TCIresponseInfo, TCIindication
+	those are imported into domain modules.
+
+TCI ASN.1 20160302
+- 16093: added RepeatRate and payload to SetWsmTxInfo as optional params
+- 16094: revised StartIPv6Tx
+- 2945: removed ToggleBsmReception
+- 2945: rearranged order of declarations
+
+20160301
+- Several modules: renamed 'exceptionMessage' to 'exception'
+- TCI16093: removed unused import module
+- Partially merged 1609.4. Compiles no error
+- Partially merged 2945. Compiles no error
+
+
+20160229
+- converted INTEGER lists to ENUMERATED
+- moved MsgID type to CommonTypes
+- moved Response to CommonTypes
+- consolidated simple data types in TCI80211
+- used 1609.3 SetWsmTxInfo, StartWsmTx, and StopWsmTx to create profile for sending BSMs.
+	Still missing BSM Rx functionality
+- renamed TCIDeviceControl to TCIsutControl. Harmonized top level data types.
