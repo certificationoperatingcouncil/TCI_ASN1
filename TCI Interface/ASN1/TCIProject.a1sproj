@@ -1,4 +1,4 @@
-<OssGuiProject productVersion="7.1" version="2.0" product="ASN.1 Studio">
+<OssGuiProject product="ASN.1 Studio" productVersion="7.1" version="2.0">
  <Asn1Files>
   <File>TCIDispatcher.asn</File>
   <File>TCI29451.asn</File>
@@ -18,9 +18,11 @@
   <File>17419_CITSapplMgmtIDs_v1.asn</File>
  </Asn1Files>
  <CompilerSettings/>
- <EncodingFiles/>
+ <EncodingFiles>
+  <File pduName="TCIMessage" encRule="ASN.1 Value Notation">TCI-dot3-req-SetWsmTxInfo.txt</File>
+ </EncodingFiles>
  <Settings>
-  <Setting name="-noRelaxedMode" present="false"/>
+  <Setting present="false" name="-noRelaxedMode"/>
   <Setting name="-oer"/>
   <Setting name="-root"/>
   <Setting name="AUTOMATIC_ENCDEC"/>

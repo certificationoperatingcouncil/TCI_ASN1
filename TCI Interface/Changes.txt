@@ -1,4 +1,4 @@
-TCI 20160321-
+TCI 20160321
 - 802.11, 16094: removed MIB (per Danlaw), updated dot4ResponceInfo
 - 802.11: removed dot4 response info
 - 16093: removed MIB
@@ -9,6 +9,7 @@ TCI 20160321-
   - CommonTypes: updated psid type, removed VarLengthNumber
   - 2945: updated psid definition
 - Changed to DataRate80211 imported from IEEE-1609-3-WEE
+- Renamed TCIMessages to TCIMsg
 
 TCI ASN.1 20160316
 - TCISutControl: removed comment causing compiler error
