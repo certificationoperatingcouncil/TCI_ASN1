@@ -6,7 +6,8 @@ IMPORTS
 AdvertiserIdentifier,
 ProviderServiceContext,
 Extension, 
-MACaddress, 
+MACaddress,
+DataRate80211,
 TXpower80211, 
 ChannelNumber80211  FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
 
@@ -17,7 +18,6 @@ RoutingAdvertisement FROM IEEE-1609-3-WSA {iso(1) identified-organization(3) iee
 PduData, 
 PduType, 
 TimeSlot, 
-DataRate, 
 RepeatRate, 
 UserPriority, 
 Opaque, 
@@ -41,7 +41,7 @@ SetWsmTxInfo ::= SEQUENCE{		-- handled through WSM-WaveShortMessage.request, WME
 	security				SecurityContext,
 	channelIdentifier		ChannelNumber80211,
 	timeslot				TimeSlot,
-	dataRate				DataRate,
+	dataRate				DataRate80211,
 	transmitPowerLevel		TXpower80211,
 	infoElementsIncluded	WaveElementsIncluded DEFAULT '000000000000000000000000'B, -- default no WAVE Extension Info elements included
 	userPriority			UserPriority,
