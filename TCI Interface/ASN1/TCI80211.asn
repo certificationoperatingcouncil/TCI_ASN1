@@ -13,8 +13,6 @@ StopWsmTx,
 StartWsmRx, 
 StopWsmRx  FROM TCI-wsm
 
-ResponseInfo FROM TCI-responseInfo
-
 Indication FROM TCI-indication
 ;
 
@@ -22,7 +20,7 @@ TCI80211 ::= CHOICE{
 	request			[0]	Request,
 	response		[1]	Response,
 	indication 		[2] Dot11Indication,
-	responseInfo	[3]	Dot11ResponseInfo,
+--	responseInfo	[3]	Dot11ResponseInfo,
 	exception		[4] Exception,
 	...
 	} 
@@ -66,13 +64,6 @@ stopWsmRx				MsgID ::= 5
 	StopWsmRx FROM TCI-wsm
 
 */
-
-Dot11ResponseInfo ::= ResponseInfo (WITH COMPONENTS {
-	msgID,	
-	resultCode,
-	info  OPTIONAL, -- if exception reported, no InfoContent provided
-	exception OPTIONAL
-	})
 
 Dot11Indication ::= Indication (WITH COMPONENTS {
 	radio,

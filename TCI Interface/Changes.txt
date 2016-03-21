@@ -1,5 +1,6 @@
 TCI 20160321-
 - 802.11, 16094: removed MIB (per Danlaw), updated dot4ResponceInfo
+- 802.11: removed dot4 response info
 - 16093: removed MIB
 - removed MIB module
 - changed to VarLengthNumber representation  of psid
