@@ -123,7 +123,7 @@ ConfigureBsm ::= SetWsmTxInfo (WITH COMPONENTS {
 		security (WITH COMPONENTS { contentType (mBSM) }),
 		channelIdentifier (172),
 		timeslot (continuous),
-		dataRate (r6Mbps-12BPSK),
+		dataRate (6),
 		transmitPowerLevel (20),
 		infoElementsIncluded ('000000000000000000000000'B),
 		userPriority (7),

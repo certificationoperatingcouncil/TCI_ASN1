@@ -78,7 +78,8 @@ Antenna ::= ENUMERATED {
 	both		(3)
 }
 
-DataRate ::= ENUMERATED {
+/*
+CodingRate ::= ENUMERATED {
 	-- see Table 9-5—Non-HT reference rate 802.11 - 2012 pp864
 	r6Mbps-12BPSK 	(11),
 	r9Mbps-34BPSK 	(15),
@@ -91,6 +92,7 @@ DataRate ::= ENUMERATED {
 	default (0),			--Use default data rate
 	trc (1)					--Use transmit rate control (currently unused)
 }
+*/
 
 TimeSlot ::= ENUMERATED {    -- consistent with dot3
 	alt-slot0 		(1),

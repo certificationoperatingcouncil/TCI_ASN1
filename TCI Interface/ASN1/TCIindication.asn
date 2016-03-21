@@ -6,13 +6,13 @@ BEGIN
 IMPORTS
 ChannelNumber80211, 
 TXpower80211, 
+DataRate80211,
 MACaddress FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
 
 PduType, 
 PduData, 
 RCPI, 
 TimeSlot, 
-DataRate, 
 RepeatRate, 
 UserPriority, 
 Opaque, 
@@ -77,7 +77,7 @@ WsmParameters ::= SEQUENCE{	-- used in EventParams
 	wsmpVersion				INTEGER(0..15),
 	channelIdentifier		ChannelNumber80211,
 	timeslot				TimeSlot,
-	dataRate				DataRate,
+	dataRate				DataRate80211,
 	receivePowerLevel		TXpower80211,
 	sourceMACAddr			MACaddress,
 	...

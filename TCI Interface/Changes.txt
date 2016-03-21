@@ -7,6 +7,7 @@ TCI 20160321-
   - wsa.asn: removed COC changes
   - CommonTypes: updated psid type, removed VarLengthNumber
   - 2945: updated psid definition
+- Changed to DataRate80211 imported from IEEE-1609-3-WEE
 
 TCI ASN.1 20160316
 - TCISutControl: removed comment causing compiler error
