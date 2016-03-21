@@ -13,13 +13,13 @@
   <File>TCIwsm.asn</File>
   <File>TCIEventHandling.asn</File>
   <File>TCICommonTypes.asn</File>
-  <File>wee.asn</File>
-  <File>wsa.asn</File>
-  <File>17419_CITSapplMgmtIDs_v1.asn</File>
+  <File>1609dot3/17419_CITSapplMgmtIDs_v1.asn</File>
+  <File>1609dot3/wee.asn</File>
+  <File>1609dot3/wsa.asn</File>
  </Asn1Files>
  <CompilerSettings/>
  <EncodingFiles>
-  <File pduName="TCIMessage" encRule="ASN.1 Value Notation">TCI-dot3-req-SetWsmTxInfo.txt</File>
+  <File pduName="TCIMsg" encRule="ASN.1 Value Notation">TCI-dot3-req-SetWsmTxInfo.txt</File>
  </EncodingFiles>
  <Settings>
   <Setting present="false" name="-noRelaxedMode"/>
