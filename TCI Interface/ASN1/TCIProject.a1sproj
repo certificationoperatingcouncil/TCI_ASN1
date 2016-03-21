@@ -1,4 +1,4 @@
-<OssGuiProject version="2.0" productVersion="7.1" product="ASN.1 Studio">
+<OssGuiProject productVersion="7.1" version="2.0" product="ASN.1 Studio">
  <Asn1Files>
   <File>TCIDispatcher.asn</File>
   <File>TCI29451.asn</File>
@@ -10,12 +10,12 @@
   <File>TCIresponseInfo.asn</File>
   <File>TCIindication.asn</File>
   <File>TCIip.asn</File>
-  <File>TCImib.asn</File>
   <File>TCIwsm.asn</File>
   <File>TCIEventHandling.asn</File>
   <File>TCICommonTypes.asn</File>
   <File>wee.asn</File>
   <File>wsa.asn</File>
+  <File>17419_CITSapplMgmtIDs_v1.asn</File>
  </Asn1Files>
  <CompilerSettings/>
  <EncodingFiles/>

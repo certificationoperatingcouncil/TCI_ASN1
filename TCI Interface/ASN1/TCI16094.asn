@@ -27,7 +27,6 @@ Ipv6InterfaceInfo FROM TCI-responseInfo
 
 Indication FROM TCI-indication
 
-GetMib FROM TCI-mib
 ;
 
 TCI16094 ::= CHOICE{
@@ -58,8 +57,6 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
 	{ StopWsmTx IDENTIFIED BY stopWsmTx} |
 	{ StartWsmRx IDENTIFIED BY startWsmRx} |
 	{ StopWsmRx IDENTIFIED BY stopWsmRx} |
--- imported from TCI-mib module
-	{ GetDot4Mib IDENTIFIED BY getDot4Mib} |
 -- imported from TCI-ip module
 	{ GetIPv6InterfaceInfo IDENTIFIED BY getIpv6InterfaceInfo} |
 	{ SetIPv6Address IDENTIFIED BY setIpv6Address} |
@@ -76,14 +73,13 @@ startWsmTx     			MsgID ::= 3
 stopWsmTx		     	MsgID ::= 4
 startWsmRx     			MsgID ::= 5
 stopWsmRx     			MsgID ::= 6
-getDot4Mib				MsgID ::= 7
-getIpv6InterfaceInfo	MsgID ::= 8
-setIpv6Address			MsgID ::= 9
-sendIpv6Ping			MsgID ::= 10
-startIPv6Tx				MsgID ::= 11
-stopIPv6Tx				MsgID ::= 12
-startIPv6Rx				MsgID ::= 13
-stopIPv6Rx				MsgID ::= 14
+getIpv6InterfaceInfo	MsgID ::= 7
+setIpv6Address			MsgID ::= 8
+sendIpv6Ping			MsgID ::= 9
+startIPv6Tx				MsgID ::= 10
+stopIPv6Tx				MsgID ::= 11
+startIPv6Rx				MsgID ::= 12
+stopIPv6Rx				MsgID ::= 13
 
 /* 
    Request Messages
@@ -104,22 +100,6 @@ stopIPv6Rx				MsgID ::= 14
 	SendIPv6Ping FROM TCI-ip
 */
 
-GetDot4Mib ::= GetMib (WITH COMPONENTS {
-	radio,
-	mib (WITH COMPONENTS {dot4Mib})
-	})
-
-/* 
-   ResponseInfo Messages
-*/
-
-Dot4ResponseInfo ::= ResponseInfo (WITH COMPONENTS {
-	msgID,	
-	resultCode,
-	info (WITH COMPONENTS { 
-		dot4MibInfo}  ) OPTIONAL, -- if exception reported, no InfoContent provided
-	exception OPTIONAL
-	})
 
 /* 
    Indication Messages
@@ -140,6 +120,17 @@ Dot4Indication ::= Indication (WITH COMPONENTS {
 				 WITH COMPONENTS {ip}
 				 ) OPTIONAL,
 	pdu	OPTIONAL,
+	exception OPTIONAL
+	})
+
+/* 
+   ResponseInfo Messages
+*/
+
+Dot4ResponseInfo ::= ResponseInfo (WITH COMPONENTS {
+	msgID,	
+	resultCode,
+	info (WITH COMPONENTS {ipv6InterfaceInfo}  ) OPTIONAL, -- if exception reported, no InfoContent provided
 	exception OPTIONAL
 	})
 

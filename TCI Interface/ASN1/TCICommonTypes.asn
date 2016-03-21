@@ -3,6 +3,7 @@ DEFINITIONS AUTOMATIC TAGS ::=
 BEGIN
 
 IMPORTS
+VarLengthNumber FROM CITSapplMgmtIDs {iso(1) standard(0) cits-applMgmt (17419) ids (1) version1 (1)} -- this is the p-encoded PSID
 ;
 
 PduData ::= Opaque
@@ -102,8 +103,7 @@ UserPriority ::= INTEGER(0..7)
 Time64 ::= INTEGER (0..9223372036854775807) 
 -- time expressed as the number of millicroseconds
 
-Psid ::= INTEGER (0..MAX)
-VarLengthNumber ::= Psid
+Psid ::= VarLengthNumber
 IpAddress ::= UTF8String(SIZE(2..255)) -- text string containing IPv6 (or IPv4 or hostname). Used as a parameter in WSA, IPv6 configuration, etc
 IpPort ::= INTEGER(0..65535)		-- UDP port used in WSA, in SetInitialState
 

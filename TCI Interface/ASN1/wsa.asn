@@ -8,10 +8,7 @@ Proper syntax and correct mapping of UPER on the intended binary presentation as
 */
 
 IMPORTS
-
---CHANGED BY COC
-VarLengthNumber FROM TCI-CommonTypes
---VarLengthNumber FROM CITSapplMgmtIDs {iso(1) standard(0) cits-applMgmt (17419) ids (1) version1 (1)}
+VarLengthNumber FROM CITSapplMgmtIDs {iso(1) standard(0) cits-applMgmt (17419) ids (1) version1 (1)}
 
 
 EXT-TYPE, Extension, RefExt, c-Reserved, c-RepeatRate,c-TxPowerUsed80211, c-2Dlocation, c-3Dlocation, c-advertiserID, c-IPv6Address, c-servicePort,c-EDCAparameterSet, c-ChannelAccess, c-SecondaryDNS, c-GatewayMACaddress,  c-ProviderMACaddress, c-RCPIthreshold, c-WSAcountThreshold, c-WSAcountThresInt, c-ProviderServContext, RepeatRate, TwoDLocation, ThreeDLocation, AdvertiserIdentifier, ProviderServiceContext, EdcaParameterSet, ChannelAccess80211, SecondaryDns,GatewayMacAddress, IPv6Address, TXpower80211, DataRate80211, ChannelNumber80211, ServicePort, ProviderMacAddress, RcpiThreshold, WsaCountThreshold, WsaCountThresholdInterval FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}

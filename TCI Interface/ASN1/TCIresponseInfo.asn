@@ -22,83 +22,9 @@ ResponseInfo ::= SEQUENCE {
 }
 
 InfoContent::= CHOICE {
-	dot11MibInfo 		[0]	Dot11MibInfo,
-	dot4MibInfo			[1] Dot4MibInfo,
-	dot3MibInfo			[2]	Dot3MibInfo,
-	ipv6InterfaceInfo	[3]	Ipv6InterfaceInfo,
+	ipv6InterfaceInfo	[1]	Ipv6InterfaceInfo,
 	
 	...
-}
-
-/*
-	Dot11 InforConcent
-*/
-
-Dot11MibInfo	::= CHOICE{
-	phyMib		[0]		Dot11PhyMIB,
-	macMib		[1]		MACMIB
-}
-
-Dot11PhyMIB			::= CHOICE{
-	phyType		[0]		Dot11PhyType,
-	-- other phy MIB go here
-	...
-}
-
-Dot11PhyType ::= ENUMERATED {
-	fhss		(1),
-	dsss		(2),
-	irbaseband	(3),
-	ofdm		(4),
-	hrdsss		(5),
-	erp			(6),
-	ht			(7) 
-}
-
-MACMIB		::= SEQUENCE{
-	dot11OCBActivated 	BOOLEAN,
-	-- other mac MIB go here
-	...
-}
-
-/*
-	dot4 MIB responseInfo
-*/
-
-Dot4MibInfo ::= CHOICE {
-	dot4Capabilities	[0]	Dot4StationConfigEntry, 
-	...
-}
-
-Dot4StationConfigEntry ::= SEQUENCE { 
-	multiphyoperation 			ENUMERATED { singlePhy (1), multiPhy (2) },
-	immediateAccessImplemented		BIT STRING (SIZE(1)),
-	alternatingAccessImplemented	BIT STRING (SIZE(1)),
-	gpsTimeImplemented				BIT STRING (SIZE(1)),
-	taFramesImplemented				BIT STRING (SIZE(1)),
-	deviceReAddressingImplemented	BIT STRING (SIZE(1)),
-	expiryTimeImplemented			BIT STRING (SIZE(1))
-}
-
-/*
-	dot3 MIB responseInfo
-*/
-
-Dot3MibInfo ::= CHOICE {
-	dot3Capabilities	[0]	Dot3StationConfigEntry,
-	...
-}
-
-Dot3StationConfigEntry ::= SEQUENCE OF SEQUENCE { 
-	dot3CchAccessImplemented					BIT STRING (SIZE(1)),
-	dot3SchAccessImplemented					BIT STRING (SIZE(1)),
-	dot3IpV6Implemented							BIT STRING (SIZE(1)),
-	dot3UdpImplemented							BIT STRING (SIZE(1)),
-	dot3TcpImplemented							BIT STRING (SIZE(1)), 
-	dot3WsmpImplemented							BIT STRING (SIZE(1)),
-	dot3UserRoleImplemented						BIT STRING (SIZE(1)),
-	dot3ProviderRoleImplemented					BIT STRING (SIZE(1)),
-	dot3TimingAdvertisementServiceImplemented	BIT STRING (SIZE(1))
 }
 
 /*

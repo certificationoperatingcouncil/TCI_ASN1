@@ -29,7 +29,6 @@ ResponseInfo FROM TCI-responseInfo
 
 Indication FROM TCI-indication
 
-GetMib FROM TCI-mib
 ;
 
 TCI16093 ::= CHOICE{
@@ -69,8 +68,7 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
 -- imported from TCI-ip module
 	{ GetIPv6InterfaceInfo IDENTIFIED BY getIpv6InterfaceInfo} |
 	{ SetIPv6Address IDENTIFIED BY setIpv6Address} |
-	{ SendIPv6Ping IDENTIFIED BY sendIpv6Ping} |
-	{ GetDot3Mib IDENTIFIED BY getDot3Mib}
+	{ SendIPv6Ping IDENTIFIED BY sendIpv6Ping}
 }
 
 setInitialState     					MsgID ::= 1
@@ -88,7 +86,6 @@ delUserService							MsgID ::= 12
 getIpv6InterfaceInfo					MsgID ::= 13
 setIpv6Address							MsgID ::= 14
 sendIpv6Ping							MsgID ::= 15
-getDot3Mib								MsgID ::= 16
 
 /* 
     Request Messages
@@ -107,10 +104,6 @@ getDot3Mib								MsgID ::= 16
 	DelUserService FROM TCI-wsm
 */
 
-GetDot3Mib ::= GetMib (WITH COMPONENTS {
-	radio,
-	mib (WITH COMPONENTS {dot3Mib})
-	})
 
 /* 
    Indication Messages
@@ -142,8 +135,7 @@ Dot3Indication ::= Indication (WITH COMPONENTS {
 Dot3ResponseInfo ::= ResponseInfo (WITH COMPONENTS {
 	msgID,	
 	resultCode,
-	info (WITH COMPONENTS { 
-		dot3MibInfo}  ) OPTIONAL, -- if exception reported, no InfoContent provided
+	info (WITH COMPONENTS {ipv6InterfaceInfo}  ) OPTIONAL, -- if exception reported, no InfoContent provided
 	exception OPTIONAL
 	})
 
