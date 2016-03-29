@@ -17,8 +17,9 @@ StopWsmRx,
 StartWsaTxPerdiodic, 
 StopWsaTxPeriodic, 
 AddWsaProviderService, 
+ChangeWsaProviderService,
 DelWsaProviderService, 
-AddUserService, 
+AddUserService,
 DelUserService FROM TCI-wsm
 
 GetIPv6InterfaceInfo, 
@@ -62,6 +63,7 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
 	{ StartWsmRx IDENTIFIED BY startWsmRx} |
 	{ StopWsmRx IDENTIFIED BY stopWsmRx} |
 	{ AddWsaProviderService IDENTIFIED BY addWsaProviderService} |
+	{ ChangeWsaProviderService IDENTIFIED BY changeWsaProviderService} |
 	{ DelWsaProviderService IDENTIFIED BY delWsaProviderService} |
 	{ AddUserService IDENTIFIED BY addUserService} |
 	{ DelUserService IDENTIFIED BY delUserService} |
@@ -80,12 +82,13 @@ stopWsaTxPeriodic     					MsgID ::= 6
 startWsmRx     							MsgID ::= 7
 stopWsmRx     							MsgID ::= 8
 addWsaProviderService		    		MsgID ::= 9
-delWsaProviderService		    		MsgID ::= 10
-addUserService							MsgID ::= 11
-delUserService							MsgID ::= 12
-getIpv6InterfaceInfo					MsgID ::= 13
-setIpv6Address							MsgID ::= 14
-sendIpv6Ping							MsgID ::= 15
+changeWsaProviderService				MsgID ::= 10
+delWsaProviderService		    		MsgID ::= 11
+addUserService							MsgID ::= 12
+delUserService							MsgID ::= 13
+getIpv6InterfaceInfo					MsgID ::= 14
+setIpv6Address							MsgID ::= 15
+sendIpv6Ping							MsgID ::= 16
 
 /* 
     Request Messages
@@ -99,6 +102,7 @@ sendIpv6Ping							MsgID ::= 15
 	StartWsaTxPerdiodic, 
 	StopWsaTxPeriodic, 
 	AddWsaProviderService, 
+	ChangeWsaProviderService,
 	DelWsaProviderService, 
 	AddUserService, 
 	DelUserService FROM TCI-wsm

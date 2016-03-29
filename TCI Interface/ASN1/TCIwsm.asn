@@ -114,6 +114,12 @@ AddWsaProviderService ::=SEQUENCE{ 	-- add service to the ProviderServiceRequest
 	...
 }
 
+ChangeWsaProviderService ::=SEQUENCE{ 	-- change service in the ProviderServiceRequestTable
+	radio					RadioInterface,	
+	serviceInfos			ServiceInfos,
+	...
+}
+
 DelWsaProviderService ::=SEQUENCE{	-- deletes specified service in the ProviderServiceRequestTable
 	radio					RadioInterface,	
 	serviceInfos			ServiceInfos,
