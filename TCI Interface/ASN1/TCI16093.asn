@@ -55,8 +55,8 @@ MESSAGE-ID-AND-TYPE ::= CLASS {
 MessageTypes MESSAGE-ID-AND-TYPE ::= {
 -- imported from TCI-wsm module
 	{ SetInitialState	IDENTIFIED BY setInitialState } |
-	{ SetWsmTxInfo IDENTIFIED BY setWsmTxInfo} |
-	{ StartWsmTx IDENTIFIED BY startWsmTx} |
+	{ Dot3SetWsmTxInfo IDENTIFIED BY setWsmTxInfo} |
+	{ Dot3StartWsmTx IDENTIFIED BY startWsmTx} |
 	{ StopWsmTx IDENTIFIED BY stopWsmTx} |
 	{ StartWsaTxPerdiodic IDENTIFIED BY startWsaTxPerdiodic} |
 	{ StopWsaTxPeriodic IDENTIFIED BY stopWsaTxPeriodic} |
@@ -94,8 +94,8 @@ sendIpv6Ping							MsgID ::= 16
     Request Messages
 
 	SetInitialState, 
-	SetWsmTxInfo, 
-	StartWsmTx, 
+--	SetWsmTxInfo, 
+--	StartWsmTx, 
 	StopWsmTx, 
 	StartWsmRx, 
 	StopWsmRx, 
@@ -112,6 +112,30 @@ sendIpv6Ping							MsgID ::= 16
 /* 
    Indication Messages
 */
+
+Dot3SetWsmTxInfo ::= SetWsmTxInfo (WITH COMPONENTS {
+	psid,
+	radio,
+	security,
+	channelIdentifier,
+	timeslot,
+	dataRate,
+	transmitPowerLevel,
+	infoElementsIncluded,
+	userPriority,
+	destinationMACAddr ('FFFFFFFFFFFF'H),
+	expiryTime	ABSENT,
+	channelLoad	ABSENT,
+	repeatRate ABSENT,
+	payload ABSENT
+})
+
+Dot3StartWsmTx ::= StartWsmTx (WITH COMPONENTS {
+	psid,
+	radio,
+	repeatRate,
+	payload	PRESENT
+})
 
 Dot3Indication ::= Indication (WITH COMPONENTS {
 	radio,

@@ -3,10 +3,11 @@ value1 TCIMsg ::= {
   time 1234123412341234,
   frame d16093 : request : {
     messageId 2,
-    value SetWsmTxInfo : {
+    value Dot3SetWsmTxInfo : {
       psid content : 32,
       radio {
-        radio radio0
+        radio radio0,
+       antenna both
       },
       security {
         contentType mBSM,
@@ -15,11 +16,10 @@ value1 TCIMsg ::= {
       channelIdentifier 172,
       timeslot continuous,
       dataRate 6,
-      transmitPowerLevel 10,
+      transmitPowerLevel 15,
       infoElementsIncluded '000000000000000000000000'B,
-      userPriority 3,
-      destinationMACAddr 'FFFFFFFFFFFF'H,
-      repeatRate 50
+      userPriority 4,
+      destinationMACAddr 'FFFFFFFFFFFF'H
     }
   }
 }

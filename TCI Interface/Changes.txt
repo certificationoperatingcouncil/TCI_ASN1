@@ -1,3 +1,8 @@
+TCI 20160404
+- TCIMsg: contrained version =1
+- 16093: defined Dot3SetWsmTxInfo, Dot3StartWsmTx
+- 29451: added missing ABSENT parameter for ConfigureBsm
+
 TCI 20160321
 - 802.11, 16094: removed MIB (per Danlaw), updated dot4ResponceInfo
 - 802.11: removed dot4 response info

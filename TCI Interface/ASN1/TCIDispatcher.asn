@@ -16,7 +16,7 @@ Time64 				FROM TCI-CommonTypes
 ;
 
 TCIMsg ::= SEQUENCE{
-	version		INTEGER(0..255),	-- protocol version 1
+	version		INTEGER(1),	-- protocol version 1
 	time		Time64,				-- 64-bit UTC timestamp with microsecond, GPS syncronized
 	frame		Frame, 				-- protocol layer
 	...
