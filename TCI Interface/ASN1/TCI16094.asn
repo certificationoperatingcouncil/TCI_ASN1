@@ -52,8 +52,8 @@ MESSAGE-ID-AND-TYPE ::= CLASS {
 MessageTypes MESSAGE-ID-AND-TYPE ::= {
 -- imported from TCI-wsm
 	{ SetInitialState IDENTIFIED BY setInitialState} |
-	{ SetWsmTxInfo IDENTIFIED BY setWsmTxInfo} |
-	{ StartWsmTx IDENTIFIED BY startWsmTx} |
+	{ Dot4SetWsmTxInfo IDENTIFIED BY setWsmTxInfo} |
+	{ Dot4StartWsmTx IDENTIFIED BY startWsmTx} |
 	{ StopWsmTx IDENTIFIED BY stopWsmTx} |
 	{ StartWsmRx IDENTIFIED BY startWsmRx} |
 	{ StopWsmRx IDENTIFIED BY stopWsmRx} |
@@ -100,6 +100,29 @@ stopIPv6Rx				MsgID ::= 13
 	SendIPv6Ping FROM TCI-ip
 */
 
+Dot4SetWsmTxInfo ::= SetWsmTxInfo (WITH COMPONENTS {
+	psid,
+	radio,
+	security,
+	channelIdentifier,
+	timeslot,
+	dataRate,
+	transmitPowerLevel,
+	infoElementsIncluded,
+	userPriority,
+	destinationMACAddr ('FFFFFFFFFFFF'H),
+	expiryTime	ABSENT,
+	channelLoad	ABSENT,
+	repeatRate ABSENT,
+	payload ABSENT
+})
+
+Dot4StartWsmTx ::= StartWsmTx (WITH COMPONENTS {
+	psid,
+	radio,
+	repeatRate,
+	payload	PRESENT
+})
 
 /* 
    Indication Messages
