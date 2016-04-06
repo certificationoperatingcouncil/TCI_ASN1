@@ -7,7 +7,8 @@ Response,
 Exception, 
 MsgID FROM TCI-CommonTypes
 
-SetInitialState, 
+SetInitialState,
+SetWsmTxInfo,
 StartWsmTx, 
 StopWsmTx, 
 StartWsmRx, 
@@ -41,17 +42,19 @@ MESSAGE-ID-AND-TYPE ::= CLASS {
 MessageTypes MESSAGE-ID-AND-TYPE ::= {
 -- imported from TCI-wsm
 	{ SetInitialState IDENTIFIED BY setInitialState} |
-	{ StartWsmTx IDENTIFIED BY startWsmTx} |
+	{ Dot11SetWsmTxInfo IDENTIFIED BY setWsmTxInfo} |
+	{ Dot11StartWsmTx IDENTIFIED BY startWsmTx} |
 	{ StopWsmTx IDENTIFIED BY stopWsmTx} |
 	{ StartWsmRx IDENTIFIED BY startWsmRx} |
 	{ StopWsmRx IDENTIFIED BY stopWsmRx}
 }
 
 setInitialState     	MsgID ::= 1
-startWsmTx				MsgID ::= 2
-stopWsmTx				MsgID ::= 3
-startWsmRx				MsgID ::= 4
-stopWsmRx				MsgID ::= 5
+setWsmTxInfo			MsgID ::= 2
+startWsmTx				MsgID ::= 3
+stopWsmTx				MsgID ::= 4
+startWsmRx				MsgID ::= 5
+stopWsmRx				MsgID ::= 6
 
 /* 
     Request Messages
@@ -64,6 +67,30 @@ stopWsmRx				MsgID ::= 5
 	StopWsmRx FROM TCI-wsm
 
 */
+
+Dot11SetWsmTxInfo ::= SetWsmTxInfo (WITH COMPONENTS {
+	psid,
+	radio,
+	security,
+	channelIdentifier,
+	timeslot,
+	dataRate,
+	transmitPowerLevel,
+	infoElementsIncluded,
+	userPriority,
+	destinationMACAddr ('FFFFFFFFFFFF'H),
+	expiryTime	ABSENT,
+	channelLoad	ABSENT,
+	repeatRate ABSENT,
+	payload ABSENT
+})
+
+Dot11StartWsmTx ::= StartWsmTx (WITH COMPONENTS {
+	psid,
+	radio,
+	repeatRate,
+	payload	PRESENT
+})
 
 Dot11Indication ::= Indication (WITH COMPONENTS {
 	radio,
