@@ -109,10 +109,6 @@ sendIpv6Ping							MsgID ::= 16
 */
 
 
-/* 
-   Indication Messages
-*/
-
 Dot3SetWsmTxInfo ::= SetWsmTxInfo (WITH COMPONENTS {
 	psid,
 	radio,
@@ -136,6 +132,10 @@ Dot3StartWsmTx ::= StartWsmTx (WITH COMPONENTS {
 	repeatRate,
 	payload	PRESENT
 })
+
+/* 
+   Indication Messages
+*/
 
 Dot3Indication ::= Indication (WITH COMPONENTS {
 	radio,
