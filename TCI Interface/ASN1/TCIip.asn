@@ -32,7 +32,7 @@ StartIPv6Tx ::= SEQUENCE{
 	destPort			IpPort OPTIONAL,
 	protocol			ENUMERATED { tcp, udp, icmp },
 	repeatRate      	RepeatRate OPTIONAL,
-	eventHandling       EventHandling  (WITH COMPONENTS {..., eventFlag ('000000000'B) }) OPTIONAL,
+	eventHandling       EventHandling  (WITH COMPONENTS {..., eventFlag }) OPTIONAL,
 	payload		    	Opaque OPTIONAL,
 	...
 }
