@@ -1,3 +1,9 @@
+TCI 20160406
+- 16094: defined Dot4SetWsmTxInfo, Dot4StartWsmTx.
+- 80211: defined Dot11SetWsmTxInfo, Dot11StartWsmTx. Added SetWsmTxInfo to the list of messages.
+- 16093: moved a comment to the appropriate location.
+
+
 TCI 20160404
 - TCIMsg: contrained version =1
 - 16093: defined Dot3SetWsmTxInfo, Dot3StartWsmTx
