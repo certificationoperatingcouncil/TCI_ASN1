@@ -3,13 +3,14 @@ DEFINITIONS AUTOMATIC TAGS ::=
 BEGIN
 
 IMPORTS
+IPv6Address, 
 MACaddress FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
 
 ResultCode, 
 MsgID, 
 Exception, 
 RadioInterface, 
-IpAddress, 
+--IpAddress, 
 Opaque FROM TCI-CommonTypes
 ;
 
@@ -33,7 +34,11 @@ InfoContent::= CHOICE {
 
 Ipv6InterfaceInfo ::= SEQUENCE OF SEQUENCE {
 	interfaceName		UTF8String(SIZE(1..255)),
-	ipAddress			SEQUENCE OF IpAddress,
+	ipAddress			SEQUENCE OF IPv6Address,
+	macAddress			MACaddress,
+	defaultGateway		IPv6Address,
+	primaryDns			IPv6Address,
+	gatewayMacAddress	MACaddress,
 	...
 }
 

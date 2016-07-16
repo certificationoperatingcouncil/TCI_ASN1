@@ -3,8 +3,10 @@ DEFINITIONS AUTOMATIC TAGS ::=
 BEGIN
 
 IMPORTS
+IPv6Address FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
+
 RepeatRate, 
-IpAddress, 
+--IpAddress, 
 IpPort, 
 Opaque, 
 RadioInterface FROM TCI-CommonTypes
@@ -20,7 +22,7 @@ GetIPv6InterfaceInfo ::= SEQUENCE{
 SetIPv6Address ::= SEQUENCE{		-- WME-AddressChange.request
 	radio				RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
 	interfaceName		UTF8String(SIZE(1..255)),
-	ipAddress			IpAddress OPTIONAL, 
+	ipAddress			IPv6Address OPTIONAL, 
 	-- optional if the new IPv6 address value must be selected at random
 	...
 }
@@ -28,12 +30,12 @@ SetIPv6Address ::= SEQUENCE{		-- WME-AddressChange.request
 StartIPv6Tx ::= SEQUENCE{
 	radio				RadioInterface,
 	interfaceName		UTF8String(SIZE(1..255)),
-	destIpAddress		IpAddress,
+	destIpAddress		IPv6Address,
 	destPort			IpPort OPTIONAL,
 	protocol			ENUMERATED { tcp, udp, icmp },
 	repeatRate      	RepeatRate OPTIONAL,
 	eventHandling       EventHandling  (WITH COMPONENTS {..., eventFlag }) OPTIONAL,
-	payload		    	Opaque OPTIONAL,
+	payload		    	Opaque OPTIONAL, -- why OPTIONAL? should be present, define in profile...
 	...
 }
  
@@ -64,7 +66,7 @@ StartIPv6Rx ::= SEQUENCE{
 	interfaceName		UTF8String(SIZE(1..255)),
 	listenPort			IpPort,
 	protocol			ENUMERATED { tcp (0), udp (1) },
-	eventHandling		EventHandling (WITH COMPONENTS {..., eventFlag ({eIpv6PktRx}) }) OPTIONAL,
+	eventHandling		EventHandling (WITH COMPONENTS {..., eventFlag ({eIpv6PktRx}) }) OPTIONAL, -- must be mandatory for Rx...
 	...
 }
 
