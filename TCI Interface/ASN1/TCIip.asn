@@ -27,7 +27,7 @@ SetIPv6Address ::= SEQUENCE{		-- WME-AddressChange.request
 	...
 }
 
-IPv6Record ::= SEQUENCE{
+IPv6TxRecord ::= SEQUENCE{
 	radio				RadioInterface,
 	interfaceName		UTF8String(SIZE(1..255)),
 	destIpAddress		IPv6Address,
@@ -35,11 +35,11 @@ IPv6Record ::= SEQUENCE{
 	protocol			ENUMERATED { tcp, udp, icmp },
 	repeatRate      	RepeatRate OPTIONAL,
 	eventHandling       EventHandling  (WITH COMPONENTS {..., eventFlag }) OPTIONAL,
-	payload		    	Opaque OPTIONAL, -- why OPTIONAL? should be present, define in profile...
+	payload		    	Opaque OPTIONAL,
 	...
 }
 
-StartIPv6Tx ::= IPv6Record (WITH COMPONENTS {
+StartIPv6Tx ::= IPv6TxRecord (WITH COMPONENTS {
 	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
 	interfaceName,
 	destIpAddress,
@@ -48,9 +48,9 @@ StartIPv6Tx ::= IPv6Record (WITH COMPONENTS {
 	repeatRate OPTIONAL,
 	eventHandling OPTIONAL,
 	payload PRESENT
-}	
+})
  
-StopIPv6Tx ::= IPv6Record (WITH COMPONENTS {
+StopIPv6Tx ::= IPv6TxRecord (WITH COMPONENTS {
 	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
 	interfaceName,
 	destIpAddress,
@@ -61,7 +61,7 @@ StopIPv6Tx ::= IPv6Record (WITH COMPONENTS {
 	payload ABSENT
 })
 
-SendIPv6Ping ::= StartIPv6Tx ( WITH COMPONENTS {
+StartIPv6Ping ::= IPv6TxRecord (WITH COMPONENTS {
 	radio,
 	interfaceName,
 	destIpAddress,
@@ -72,16 +72,35 @@ SendIPv6Ping ::= StartIPv6Tx ( WITH COMPONENTS {
 	payload ABSENT
 	})
 
-StartIPv6Rx ::= SEQUENCE{
+StopIPv6Ping ::= IPv6TxRecord (WITH COMPONENTS {
+	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+	interfaceName,
+	destIpAddress,
+	destPort ABSENT,
+	protocol (icmp),
+	repeatRate ABSENT,
+	eventHandling ABSENT,
+	payload ABSENT
+})
+
+IPv6RxRecord ::= SEQUENCE{
 	radio				RadioInterface,
 	interfaceName		UTF8String(SIZE(1..255)),
 	listenPort			IpPort,
 	protocol			ENUMERATED { tcp (0), udp (1) },
-	eventHandling		EventHandling (WITH COMPONENTS {..., eventFlag ({eIpv6PktRx}) }) OPTIONAL, -- must be mandatory for Rx...
+	eventHandling		EventHandling (WITH COMPONENTS {..., eventFlag ({eIpv6PktRx}) }) OPTIONAL,
 	...
 }
 
-StopIPv6Rx ::= StartIPv6Rx ( WITH COMPONENTS {
+StartIPv6Rx ::= IPv6RxRecord (WITH COMPONENTS {
+	radio,
+	interfaceName,
+	listenPort,
+	protocol,
+	eventHandling PRESENT
+})
+
+StopIPv6Rx ::= IPv6RxRecord ( WITH COMPONENTS {
 	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
 	interfaceName,
 	listenPort,

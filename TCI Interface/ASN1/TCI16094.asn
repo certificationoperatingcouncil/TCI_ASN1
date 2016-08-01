@@ -20,7 +20,8 @@ StopIPv6Tx,
 StartIPv6Rx, 
 StopIPv6Rx, 
 SetIPv6Address, 
-SendIPv6Ping FROM TCI-ip
+StartIPv6Ping,
+StopIPv6Ping FROM TCI-ip
 
 ResponseInfo, 
 Ipv6InterfaceInfo FROM TCI-responseInfo
@@ -60,11 +61,12 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
 -- imported from TCI-ip module
 	{ GetIPv6InterfaceInfo IDENTIFIED BY getIpv6InterfaceInfo} |
 	{ SetIPv6Address IDENTIFIED BY setIpv6Address} |
-	{ SendIPv6Ping IDENTIFIED BY sendIpv6Ping} |
 	{ StartIPv6Tx IDENTIFIED BY startIPv6Tx} |
 	{ StopIPv6Tx IDENTIFIED BY stopIPv6Tx} |
 	{ StartIPv6Rx IDENTIFIED BY startIPv6Rx} |
-	{ StopIPv6Rx IDENTIFIED BY stopIPv6Rx}
+	{ StopIPv6Rx IDENTIFIED BY stopIPv6Rx} |
+	{ StartIPv6Ping IDENTIFIED BY startIpv6Ping} |
+	{ StopIPv6Ping IDENTIFIED BY stopIpv6Ping} 
 }
 
 setInitialState     	MsgID ::= 1
@@ -75,11 +77,12 @@ startWsmRx     			MsgID ::= 5
 stopWsmRx     			MsgID ::= 6
 getIpv6InterfaceInfo	MsgID ::= 7
 setIpv6Address			MsgID ::= 8
-sendIpv6Ping			MsgID ::= 9
-startIPv6Tx				MsgID ::= 10
-stopIPv6Tx				MsgID ::= 11
-startIPv6Rx				MsgID ::= 12
-stopIPv6Rx				MsgID ::= 13
+startIPv6Tx				MsgID ::= 9
+stopIPv6Tx				MsgID ::= 10
+startIPv6Rx				MsgID ::= 11
+stopIPv6Rx				MsgID ::= 12
+startIpv6Ping			MsgID ::= 13
+stopIpv6Ping			MsgID ::= 14
 
 /* 
    Request Messages
@@ -97,7 +100,8 @@ stopIPv6Rx				MsgID ::= 13
 	StartIPv6Rx, 
 	StopIPv6Rx, 
 	SetIPv6Address, 
-	SendIPv6Ping FROM TCI-ip
+	StartIPv6Ping,
+	StopIPv6Ping FROM TCI-ip
 */
 
 Dot4SetWsmTxInfo ::= SetWsmTxInfo (WITH COMPONENTS {
