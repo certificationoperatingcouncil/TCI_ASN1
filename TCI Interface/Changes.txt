@@ -1,3 +1,12 @@
+TCI_20160801
+- TCICommonTypes: Added enumerated ExceptionID 
+- TCIDispatcher: clarified comments for time format
+- Several: replaced types IpAddress with IPv6Address, IpPort with ServicePort from 16093.WEE module
+- Several: removed imports of IpPort and IPv6Address
+- TCIip: renamed SendIPv6Ping to StartIPv6Ping, added StopIPv6Ping
+- 16093, 16094: updates to reflect changes to StartIPv6Ping, added StopIPv6Ping
+- TCIip: created root classes IPv6RxRecord, IPv6TxRecord as base classes for IP-based messages
+
 TCI 20160406
 - 16094: defined Dot4SetWsmTxInfo, Dot4StartWsmTx.
 - 80211: defined Dot11SetWsmTxInfo, Dot11StartWsmTx. Added SetWsmTxInfo to the list of messages.

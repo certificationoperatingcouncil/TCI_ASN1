@@ -3,11 +3,9 @@ DEFINITIONS AUTOMATIC TAGS ::=
 BEGIN
 
 IMPORTS
-IPv6Address FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
+IPv6Address, ServicePort FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
 
 RepeatRate, 
---IpAddress, 
-IpPort, 
 Opaque, 
 RadioInterface FROM TCI-CommonTypes
 
@@ -31,7 +29,7 @@ IPv6TxRecord ::= SEQUENCE{
 	radio				RadioInterface,
 	interfaceName		UTF8String(SIZE(1..255)),
 	destIpAddress		IPv6Address,
-	destPort			IpPort OPTIONAL,
+	destPort			ServicePort OPTIONAL,
 	protocol			ENUMERATED { tcp, udp, icmp },
 	repeatRate      	RepeatRate OPTIONAL,
 	eventHandling       EventHandling  (WITH COMPONENTS {..., eventFlag }) OPTIONAL,
@@ -86,7 +84,7 @@ StopIPv6Ping ::= IPv6TxRecord (WITH COMPONENTS {
 IPv6RxRecord ::= SEQUENCE{
 	radio				RadioInterface,
 	interfaceName		UTF8String(SIZE(1..255)),
-	listenPort			IpPort,
+	listenPort			ServicePort,
 	protocol			ENUMERATED { tcp (0), udp (1) },
 	eventHandling		EventHandling (WITH COMPONENTS {..., eventFlag ({eIpv6PktRx}) }) OPTIONAL,
 	...
