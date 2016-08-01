@@ -27,7 +27,7 @@ SetIPv6Address ::= SEQUENCE{		-- WME-AddressChange.request
 	...
 }
 
-StartIPv6Tx ::= SEQUENCE{
+IPv6Record ::= SEQUENCE{
 	radio				RadioInterface,
 	interfaceName		UTF8String(SIZE(1..255)),
 	destIpAddress		IPv6Address,
@@ -38,8 +38,19 @@ StartIPv6Tx ::= SEQUENCE{
 	payload		    	Opaque OPTIONAL, -- why OPTIONAL? should be present, define in profile...
 	...
 }
+
+StartIPv6Tx ::= IPv6Record (WITH COMPONENTS {
+	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+	interfaceName,
+	destIpAddress,
+	destPort,
+	protocol,
+	repeatRate OPTIONAL,
+	eventHandling OPTIONAL,
+	payload PRESENT
+}	
  
-StopIPv6Tx ::= StartIPv6Tx (WITH COMPONENTS {
+StopIPv6Tx ::= IPv6Record (WITH COMPONENTS {
 	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
 	interfaceName,
 	destIpAddress,
