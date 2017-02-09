@@ -24,7 +24,7 @@ TCIMsg ::= SEQUENCE{
 
 Frame ::=CHOICE {
 	d16093 [1] TCI16093,
-	d16092 [2] TCI16092,
+	--d16092 [2] TCI16092, module is redundant with TCI16093
 	d80211 [3] TCI80211,
 	d16094 [4] TCI16094,
 	d29451 [5] TCI29451,

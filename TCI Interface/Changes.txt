@@ -1,3 +1,7 @@
+TCI_20170208
+- TCIwsm: Removed default setting for eventHandling in StartWsmRx
+- TCIDispatcher: commented out TCI16092 in Frame, which is redundant with TCI16093
+
 TCI_20160801
 - TCICommonTypes: Added enumerated ExceptionID 
 - TCIDispatcher: clarified comments for time format
