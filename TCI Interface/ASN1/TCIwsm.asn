@@ -72,8 +72,7 @@ StartWsmRx ::= SEQUENCE{	-- uses on WME-WSMService.request; WME-ChannelService u
 	radio				RadioInterface,
 	channelIdentifier	ChannelNumber80211,
 	timeSlot			TimeSlot,
-	eventHandling		EventHandling (WITH COMPONENTS 
-							{..., eventFlag ('000000000'B) }),					
+	eventHandling		EventHandling,					
 	...
 }
 

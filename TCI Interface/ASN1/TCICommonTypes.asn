@@ -54,8 +54,13 @@ ExceptionType	::= ENUMERATED{
 Module ::= UTF8String (SIZE(0..255))
 -- Function/Module reporting an exception
 
-ExceptionId ::= INTEGER (0..65535)
--- exception numerical identifier
+ExceptionId ::= ENUMERATED {
+ critical-error (1),
+ incorrect-parameter-value (2),
+ missing-parameter (3),
+ radio-interface-unavailable (4),
+ ...	-- future exception IDs
+}
 
 ExceptionText ::= UTF8String (SIZE(0..1200))
 -- short description of exception
@@ -81,6 +86,7 @@ Antenna ::= ENUMERATED {
 /*
 CodingRate ::= ENUMERATED {
 	-- see Table 9-5—Non-HT reference rate 802.11 - 2012 pp864
+	-- update with table 18-4 on 802.11 - 2012 pp1590
 	r6Mbps-12BPSK 	(11),
 	r9Mbps-34BPSK 	(15),
 	r12Mbps-12QPSK 	(10),
@@ -103,11 +109,12 @@ TimeSlot ::= ENUMERATED {    -- consistent with dot3
 RCPI ::= INTEGER (0..255)
 UserPriority ::= INTEGER(0..7)
 Time64 ::= INTEGER (0..9223372036854775807) 
--- time expressed as the number of millicroseconds
+-- time expressed as the number of millicroseconds, 
+-- due to ASN.1 limitation in OSS, the highest bit is set to 0
 
 Psid ::= VarLengthNumber
-IpAddress ::= UTF8String(SIZE(2..255)) -- text string containing IPv6 (or IPv4 or hostname). Used as a parameter in WSA, IPv6 configuration, etc
-IpPort ::= INTEGER(0..65535)		-- UDP port used in WSA, in SetInitialState
+--IpAddress ::= UTF8String(SIZE(2..255)) ---- text string containing IPv6 (or IPv4 or hostname). Used as a parameter in WSA, IPv6 configuration, etc
+--IpPort ::= INTEGER(0..65535)		---- UDP port used in WSA, in SetInitialState
 
 RepeatRate ::= INTEGER (0..255) -- Number of messages transmitted per 5sec interval; if set to 0, transmit message one time only
 

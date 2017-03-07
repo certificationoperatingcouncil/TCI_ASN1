@@ -3,9 +3,9 @@ DEFINITIONS AUTOMATIC TAGS ::=
 BEGIN
 
 IMPORTS
+IPv6Address, ServicePort FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
+
 RepeatRate, 
-IpAddress, 
-IpPort, 
 Opaque, 
 RadioInterface FROM TCI-CommonTypes
 
@@ -20,24 +20,35 @@ GetIPv6InterfaceInfo ::= SEQUENCE{
 SetIPv6Address ::= SEQUENCE{		-- WME-AddressChange.request
 	radio				RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
 	interfaceName		UTF8String(SIZE(1..255)),
-	ipAddress			IpAddress OPTIONAL, 
+	ipAddress			IPv6Address OPTIONAL, 
 	-- optional if the new IPv6 address value must be selected at random
 	...
 }
 
-StartIPv6Tx ::= SEQUENCE{
+IPv6TxRecord ::= SEQUENCE{
 	radio				RadioInterface,
 	interfaceName		UTF8String(SIZE(1..255)),
-	destIpAddress		IpAddress,
-	destPort			IpPort OPTIONAL,
+	destIpAddress		IPv6Address,
+	destPort			ServicePort OPTIONAL,
 	protocol			ENUMERATED { tcp, udp, icmp },
 	repeatRate      	RepeatRate OPTIONAL,
-	eventHandling       EventHandling  (WITH COMPONENTS {..., eventFlag ('000000000'B) }) OPTIONAL,
+	eventHandling       EventHandling  (WITH COMPONENTS {..., eventFlag }) OPTIONAL,
 	payload		    	Opaque OPTIONAL,
 	...
 }
+
+StartIPv6Tx ::= IPv6TxRecord (WITH COMPONENTS {
+	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+	interfaceName,
+	destIpAddress,
+	destPort,
+	protocol,
+	repeatRate OPTIONAL,
+	eventHandling OPTIONAL,
+	payload PRESENT
+})
  
-StopIPv6Tx ::= StartIPv6Tx (WITH COMPONENTS {
+StopIPv6Tx ::= IPv6TxRecord (WITH COMPONENTS {
 	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
 	interfaceName,
 	destIpAddress,
@@ -48,7 +59,7 @@ StopIPv6Tx ::= StartIPv6Tx (WITH COMPONENTS {
 	payload ABSENT
 })
 
-SendIPv6Ping ::= StartIPv6Tx ( WITH COMPONENTS {
+StartIPv6Ping ::= IPv6TxRecord (WITH COMPONENTS {
 	radio,
 	interfaceName,
 	destIpAddress,
@@ -59,16 +70,35 @@ SendIPv6Ping ::= StartIPv6Tx ( WITH COMPONENTS {
 	payload ABSENT
 	})
 
-StartIPv6Rx ::= SEQUENCE{
+StopIPv6Ping ::= IPv6TxRecord (WITH COMPONENTS {
+	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+	interfaceName,
+	destIpAddress,
+	destPort ABSENT,
+	protocol (icmp),
+	repeatRate ABSENT,
+	eventHandling ABSENT,
+	payload ABSENT
+})
+
+IPv6RxRecord ::= SEQUENCE{
 	radio				RadioInterface,
 	interfaceName		UTF8String(SIZE(1..255)),
-	listenPort			IpPort,
+	listenPort			ServicePort,
 	protocol			ENUMERATED { tcp (0), udp (1) },
 	eventHandling		EventHandling (WITH COMPONENTS {..., eventFlag ({eIpv6PktRx}) }) OPTIONAL,
 	...
 }
 
-StopIPv6Rx ::= StartIPv6Rx ( WITH COMPONENTS {
+StartIPv6Rx ::= IPv6RxRecord (WITH COMPONENTS {
+	radio,
+	interfaceName,
+	listenPort,
+	protocol,
+	eventHandling PRESENT
+})
+
+StopIPv6Rx ::= IPv6RxRecord ( WITH COMPONENTS {
 	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
 	interfaceName,
 	listenPort,

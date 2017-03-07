@@ -24,7 +24,8 @@ DelUserService FROM TCI-wsm
 
 GetIPv6InterfaceInfo, 
 SetIPv6Address, 
-SendIPv6Ping FROM TCI-ip
+StartIPv6Ping,
+StopIPv6Ping FROM TCI-ip
 
 ResponseInfo FROM TCI-responseInfo
 
@@ -70,7 +71,8 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
 -- imported from TCI-ip module
 	{ GetIPv6InterfaceInfo IDENTIFIED BY getIpv6InterfaceInfo} |
 	{ SetIPv6Address IDENTIFIED BY setIpv6Address} |
-	{ SendIPv6Ping IDENTIFIED BY sendIpv6Ping}
+	{ StartIPv6Ping IDENTIFIED BY startIpv6Ping} |
+	{ StopIPv6Ping IDENTIFIED BY stopIpv6Ping}
 }
 
 setInitialState     					MsgID ::= 1
@@ -88,7 +90,8 @@ addUserService							MsgID ::= 12
 delUserService							MsgID ::= 13
 getIpv6InterfaceInfo					MsgID ::= 14
 setIpv6Address							MsgID ::= 15
-sendIpv6Ping							MsgID ::= 16
+startIpv6Ping							MsgID ::= 16
+stopIpv6Ping							MsgID ::= 17
 
 /* 
     Request Messages

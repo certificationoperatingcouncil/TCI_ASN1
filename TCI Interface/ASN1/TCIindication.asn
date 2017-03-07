@@ -4,6 +4,7 @@ DEFINITIONS AUTOMATIC TAGS ::=
 BEGIN
 
 IMPORTS
+IPv6Address,
 ChannelNumber80211, 
 TXpower80211, 
 DataRate80211,
@@ -20,9 +21,8 @@ HashedId8,
 Exception, 
 RadioInterface, 
 Psid, 
-Time64, 
-IpPort, 
-IpAddress, 
+Time64,
+--IpAddress, 
 MsgID FROM TCI-CommonTypes
 ;
 
@@ -85,7 +85,7 @@ WsmParameters ::= SEQUENCE{	-- used in EventParams
 
 IpParameters ::= SEQUENCE{ -- used in EventParams
 	interfaceName			UTF8String(SIZE(1..255)),
-	sourceIPaddress			IpAddress,
+	sourceIPaddress			IPv6Address,
 	...
 }
 

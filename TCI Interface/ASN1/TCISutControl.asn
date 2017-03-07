@@ -3,8 +3,7 @@ TCI-SutControl
 DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 
 IMPORTS
-Response, 
-IpPort, 
+Response,
 MsgID, 
 Exception FROM TCI-CommonTypes
 
