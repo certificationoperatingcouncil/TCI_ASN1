@@ -104,13 +104,13 @@ ChangePosition ::= SEQUENCE{
 	deltaElevation	Elevation
 }
 
-ChangeSpeed ::= INTEGER(0..8191)
+ChangeSpeed ::= INTEGER(-8191..8191)
 -- Speed value
 
-ChangeHeading ::= INTEGER(0..28800)
+ChangeHeading ::= INTEGER(-28800..28800)
 -- Heading offset.
 
-ChangeYawRate ::= INTEGER(-32767..32767)
+ChangeYawRate ::= INTEGER(-65534..65534)
 --Yaw rate offset.
 
 /*
@@ -157,11 +157,18 @@ StopBsmRx ::= StopWsmRx (WITH COMPONENTS {
 		psid (WITH COMPONENTS {content	(32)})
 	})
 
-EnablePositionalData ::= BOOLEAN
+EnableGpsInput ::= BOOLEAN
 
 EnableBrakeAvailability ::= BOOLEAN
 
-EnableBrakePedalStatus ::= BOOLEAN
+EnableIndividualBrakePedalStatus ::= BOOLEAN
+
+SetBrakePedal ::= BIT STRING {
+	frontDriver				        (0),
+	forwardPassenger        		(1),
+	rearDriver			        	(2),
+	rearPassenger   		        (3)
+}
 
 EnableCongestionMitigation ::= BOOLEAN
 
