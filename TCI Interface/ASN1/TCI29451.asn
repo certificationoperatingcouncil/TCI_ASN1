@@ -62,15 +62,16 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
 	{ SetMsgCount IDENTIFIED BY setMsgCount} |
 	{ SetVehicleEventFlags IDENTIFIED BY setVehicleEventFlags} |
 	{ SetVehicleTransmission IDENTIFIED BY setVehicleTransmission } |
-	{ EnableCongestionMitigation IDENTIFIED BY enableCongestionMitigation}
+	{ EnableCongestionMitigation IDENTIFIED BY enableCongestionMitigation} |
+	{ SetBrakePedal IDENTIFIED BY setBrakePedal}
 }
 
 setInitialState		     		MsgID ::= 1
-setPosition						MsgID ::= 2
-changePosition					MsgID ::= 3
-changeSpeed						MsgID ::= 4
-changeHeading 					MsgID ::= 5
-changeYawRate					MsgID ::= 6
+setPosition				MsgID ::= 2
+changePosition				MsgID ::= 3
+changeSpeed				MsgID ::= 4
+changeHeading 				MsgID ::= 5
+changeYawRate				MsgID ::= 6
 enablePositionalData			MsgID ::= 7
 
 setVehicleTransmission			MsgID ::= 8
@@ -79,14 +80,15 @@ setVehicleEventFlags			MsgID ::= 10
 enableBrakePedalStatus			MsgID ::= 11
 enableBrakeAvailability			MsgID ::= 12
 enableCongestionMitigation		MsgID ::= 13
-setTemporaryId					MsgID ::= 14
-setMsgCount						MsgID ::= 15
+setTemporaryId				MsgID ::= 14
+setMsgCount				MsgID ::= 15
 
-configureBsm					MsgID ::= 16
-startBsmTx						MsgID ::= 17
-stopBsmTx						MsgID ::= 18
-startBsmRx						MsgID ::= 19
-stopBsmRx						MsgID ::= 20
+configureBsm				MsgID ::= 16
+startBsmTx				MsgID ::= 17
+stopBsmTx				MsgID ::= 18
+startBsmRx				MsgID ::= 19
+stopBsmRx				MsgID ::= 20
+setBrakePedal				MsgID ::= 21
 
 /* 
    Request Messages
@@ -160,6 +162,13 @@ StopBsmRx ::= StopWsmRx (WITH COMPONENTS {
 EnableGpsInput ::= BOOLEAN
 
 EnableBrakeAvailability ::= BOOLEAN
+
+SetBrakePedal ::= BIT STRING {
+	frontDriver				        (0),
+	forwardPassenger        		(1),
+	rearDriver			        	(2),
+	rearPassenger   		        (3)
+}
 
 EnableIndividualBrakePedalStatus ::= BOOLEAN
 
