@@ -50,7 +50,6 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
 	{ ChangeYawRate IDENTIFIED BY changeYawRate} |
 	{ EnableBrakePedalStatus IDENTIFIED BY enableBrakePedalStatus} |
 	{ SetExteriorLightsStatus IDENTIFIED BY setExteriorLightsStatus} |
-
 	{ ConfigureBsm IDENTIFIED BY configureBsm} |
 	{ StartBsmTx IDENTIFIED BY startBsmTx} |
 	{ StopBsmTx IDENTIFIED BY stopBsmTx} |	
@@ -62,7 +61,8 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
 	{ SetMsgCount IDENTIFIED BY setMsgCount} |
 	{ SetVehicleEventFlags IDENTIFIED BY setVehicleEventFlags} |
 	{ SetVehicleTransmission IDENTIFIED BY setVehicleTransmission } |
-	{ EnableCongestionMitigation IDENTIFIED BY enableCongestionMitigation}
+	{ EnableCongestionMitigation IDENTIFIED BY enableCongestionMitigation} |
+	{ SetBrakePedal IDENTIFIED BY setBrakePedal}	
 }
 
 setInitialState		     		MsgID ::= 1
@@ -72,7 +72,6 @@ changeSpeed						MsgID ::= 4
 changeHeading 					MsgID ::= 5
 changeYawRate					MsgID ::= 6
 enablePositionalData			MsgID ::= 7
-
 setVehicleTransmission			MsgID ::= 8
 setExteriorLightsStatus			MsgID ::= 9
 setVehicleEventFlags			MsgID ::= 10
@@ -81,12 +80,12 @@ enableBrakeAvailability			MsgID ::= 12
 enableCongestionMitigation		MsgID ::= 13
 setTemporaryId					MsgID ::= 14
 setMsgCount						MsgID ::= 15
-
 configureBsm					MsgID ::= 16
 startBsmTx						MsgID ::= 17
 stopBsmTx						MsgID ::= 18
 startBsmRx						MsgID ::= 19
 stopBsmRx						MsgID ::= 20
+setBrakePedal					MsgID ::= 21
 
 /* 
    Request Messages
@@ -164,10 +163,10 @@ EnableBrakeAvailability ::= BOOLEAN
 EnableIndividualBrakePedalStatus ::= BOOLEAN
 
 SetBrakePedal ::= BIT STRING {
-	frontDriver				        (0),
-	forwardPassenger        		(1),
-	rearDriver			        	(2),
-	rearPassenger   		        (3)
+	frontDriver			(0),
+	forwardPassenger	(1),
+	rearDriver			(2),
+	rearPassenger		(3)
 }
 
 EnableCongestionMitigation ::= BOOLEAN
@@ -223,10 +222,10 @@ SetExteriorLightsStatus ::= BIT STRING
 D2945Indication ::= Indication (WITH COMPONENTS {
 	radio,
 	event (	eWsmPktRx |
-			exception),
+		exception),
 	eventParams	(WITH COMPONENTS {wsm}
 				 ) OPTIONAL,
-	pdu	OPTIONAL,
+	pdu	  OPTIONAL,
 	exception OPTIONAL
 	})
 
