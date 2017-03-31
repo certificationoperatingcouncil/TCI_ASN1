@@ -48,14 +48,14 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
 	{ ChangeSpeed IDENTIFIED BY changeSpeed} |
 	{ ChangeHeading IDENTIFIED BY changeHeading} |
 	{ ChangeYawRate IDENTIFIED BY changeYawRate} |
-	{ EnableIndividualBrakePedalStatus IDENTIFIED BY enableBrakePedalStatus} |
+	{ EnableIndividualBrakePedalStatus IDENTIFIED BY enableIndividualBrakePedalStatus} |
 	{ SetExteriorLightsStatus IDENTIFIED BY setExteriorLightsStatus} |
 	{ ConfigureBsm IDENTIFIED BY configureBsm} |
 	{ StartBsmTx IDENTIFIED BY startBsmTx} |
 	{ StopBsmTx IDENTIFIED BY stopBsmTx} |	
 	{ StartBsmRx IDENTIFIED BY startBsmRx} |
 	{ StopBsmRx IDENTIFIED BY stopBsmRx} |	
-	{ EnableGpsInput IDENTIFIED BY enablePositionalData} |
+	{ EnableGpsInput IDENTIFIED BY enableGpsInput} |
 	{ EnableBrakeAvailability IDENTIFIED BY enableBrakeAvailability} |
 	{ SetTemporaryId IDENTIFIED BY setTemporaryId} |
 	{ SetMsgCount IDENTIFIED BY setMsgCount} |
