@@ -22,85 +22,86 @@ Indication FROM TCI-indication
 ;
 
 TCI29451 ::= CHOICE{
-	request			[0]	Request,
-	response		[1]	Response,
-	indication 		[2] D2945Indication,
---	responseInfo	[3]	ResponseInfo,
-	exception		[4] Exception,
-	...
-	} 
+    request         [0] Request,
+    response        [1] Response,
+    indication      [2] D2945Indication,
+--  responseInfo    [3] ResponseInfo,
+    exception       [4] Exception,
+    ...
+    } 
 
 Request ::=  SEQUENCE {
-	messageId   MESSAGE-ID-AND-TYPE.&id({MessageTypes}),
-	value       MESSAGE-ID-AND-TYPE.&Type({MessageTypes}{@.messageId}),
-	...
-	}
+    messageId   MESSAGE-ID-AND-TYPE.&id({MessageTypes}),
+    value       MESSAGE-ID-AND-TYPE.&Type({MessageTypes}{@.messageId}),
+    ...
+    }
 
 MESSAGE-ID-AND-TYPE ::= CLASS {
-	&id    MsgID UNIQUE,
-	&Type
-	} WITH SYNTAX {&Type IDENTIFIED BY &id}
+    &id    MsgID UNIQUE,
+    &Type
+    } WITH SYNTAX {&Type IDENTIFIED BY &id}
 
 MessageTypes MESSAGE-ID-AND-TYPE ::= {
-	{ SetInitialState IDENTIFIED BY setInitialState} |
-	{ SetPosition IDENTIFIED BY setPosition} |
-	{ ChangePosition IDENTIFIED BY changePosition} |
-	{ ChangeSpeed IDENTIFIED BY changeSpeed} |
-	{ ChangeHeading IDENTIFIED BY changeHeading} |
-	{ ChangeYawRate IDENTIFIED BY changeYawRate} |
-	{ ConfigureBsm IDENTIFIED BY configureBsm} |
-	{ StartBsmTx IDENTIFIED BY startBsmTx} |
-	{ StopBsmTx IDENTIFIED BY stopBsmTx} |
-	{ StartBsmRx IDENTIFIED BY startBsmRx} |
-	{ StopBsmRx IDENTIFIED BY stopBsmRx} |
-	{ EnableGpsInput IDENTIFIED BY enableGpsInput} |
-	{ EnableBrakeAvailability IDENTIFIED BY enableBrakeAvailability} |
-	{ EnableIndividualBrakePedalStatus IDENTIFIED BY enableIndividualBrakePedalStatus} |
-	{ EnableCongestionMitigation IDENTIFIED BY enableCongestionMitigation} |
-	{ SetTemporaryId IDENTIFIED BY setTemporaryId} |
-	{ SetMsgCount IDENTIFIED BY setMsgCount} |
-	{ SetVehicleEventFlags IDENTIFIED BY setVehicleEventFlags} |
-	{ SetVehicleTransmission IDENTIFIED BY setVehicleTransmission } |
-	{ SetBrakePedal IDENTIFIED BY setBrakePedal} |
-	{ SetExteriorLightsStatus IDENTIFIED BY setExteriorLightsStatus}
+    { SetInitialState IDENTIFIED BY setInitialState} |
+    { SetPosition IDENTIFIED BY setPosition} |
+    { ChangePosition IDENTIFIED BY changePosition} |
+    { ChangeSpeed IDENTIFIED BY changeSpeed} |
+    { ChangeHeading IDENTIFIED BY changeHeading} |
+    { ChangeYawRate IDENTIFIED BY changeYawRate} |
+    { ConfigureBsm IDENTIFIED BY configureBsm} |
+    { StartBsmTx IDENTIFIED BY startBsmTx} |
+    { StopBsmTx IDENTIFIED BY stopBsmTx} |
+    { StartBsmRx IDENTIFIED BY startBsmRx} |
+    { StopBsmRx IDENTIFIED BY stopBsmRx} |
+    { EnableGpsInput IDENTIFIED BY enableGpsInput} |
+    { EnableBrakeAvailability IDENTIFIED BY enableBrakeAvailability} |
+    { EnableIndividualBrakePedalStatus IDENTIFIED BY enableIndividualBrakePedalStatus} |
+    { EnableCongestionMitigation IDENTIFIED BY enableCongestionMitigation} |
+    { SetTemporaryId IDENTIFIED BY setTemporaryId} |
+    { SetMsgCount IDENTIFIED BY setMsgCount} |
+    { SetVehicleEventFlags IDENTIFIED BY setVehicleEventFlags} |
+    { SetVehicleTransmission IDENTIFIED BY setVehicleTransmission } |
+    { SetBrakePedal IDENTIFIED BY setBrakePedal} |
+    { SetExteriorLightsStatus IDENTIFIED BY setExteriorLightsStatus}
 }
 
-setInitialState						MsgID ::= 1
-setPosition							MsgID ::= 2
-changePosition						MsgID ::= 3
-changeSpeed							MsgID ::= 4
-changeHeading 						MsgID ::= 5
-changeYawRate						MsgID ::= 6
-configureBsm						MsgID ::= 7
-startBsmTx							MsgID ::= 8
-stopBsmTx							MsgID ::= 9
-startBsmRx							MsgID ::= 10
-stopBsmRx							MsgID ::= 11
-enableGpsInput						MsgID ::= 12
-enableBrakeAvailability				MsgID ::= 13
-enableIndividualBrakePedalStatus	MsgID ::= 14
-enableCongestionMitigation			MsgID ::= 15
-setTemporaryId						MsgID ::= 16
-setMsgCount							MsgID ::= 17
-setVehicleEventFlags				MsgID ::= 18
-setVehicleTransmission				MsgID ::= 19
-setBrakePedal						MsgID ::= 20
-setExteriorLightsStatus				MsgID ::= 21
+setInitialState                     MsgID ::= 1
+setPosition                         MsgID ::= 2
+changePosition                      MsgID ::= 3
+changeSpeed                         MsgID ::= 4
+changeHeading                       MsgID ::= 5
+changeYawRate                       MsgID ::= 6
+enableGpsInput                      MsgID ::= 7
+setVehicleTransmission              MsgID ::= 8
+setExteriorLightsStatus             MsgID ::= 9
+setVehicleEventFlags                MsgID ::= 10
+enableIndividualBrakePedalStatus    MsgID ::= 11
+enableBrakeAvailability             MsgID ::= 12
+enableCongestionMitigation          MsgID ::= 13
+setTemporaryId                      MsgID ::= 14
+setMsgCount                         MsgID ::= 15
+configureBsm                        MsgID ::= 16
+startBsmTx                          MsgID ::= 17
+stopBsmTx                           MsgID ::= 18
+startBsmRx                          MsgID ::= 19
+stopBsmRx                           MsgID ::= 20
+setBrakePedal                       MsgID ::= 21
+
 
 /* 
    Request Messages
 */
 
 SetPosition ::= SEQUENCE{
-	latitude 	Latitude,
-	longitude 	Longitude,
-	elevation	Elevation
+    latitude    Latitude,
+    longitude   Longitude,
+    elevation   Elevation
 }
 
 ChangePosition ::= SEQUENCE{
-	deltaLatitude 	Latitude,
-	deltaLongitude 	Longitude,
-	deltaElevation	Elevation
+    deltaLatitude   Latitude,
+    deltaLongitude  Longitude,
+    deltaElevation  Elevation
 }
 
 ChangeSpeed ::= INTEGER(-8191..8191)
@@ -117,44 +118,44 @@ ChangeYawRate ::= INTEGER(-65534..65534)
 */
 
 ConfigureBsm ::= SetWsmTxInfo (WITH COMPONENTS {
-		psid (WITH COMPONENTS {content	(32)}),
-		radio,
-		security (WITH COMPONENTS { contentType (mBSM) }),
-		channelIdentifier (172),
-		timeslot (continuous),
-		dataRate (6),
-		transmitPowerLevel (20),
-		infoElementsIncluded ('000000000000000000000000'B),
-		userPriority (7),
-		destinationMACAddr ('FFFFFFFFFFFF'H),
-		expiryTime	ABSENT,
-		channelLoad	ABSENT,
-		repeatRate ABSENT,
-		payload ABSENT		-- Assumes BSM payload is generated by the SUT	
-	})
+        psid (WITH COMPONENTS {content  (32)}),
+        radio,
+        security (WITH COMPONENTS { contentType (mBSM) }),
+        channelIdentifier (172),
+        timeslot (continuous),
+        dataRate (6),
+        transmitPowerLevel (20),
+        infoElementsIncluded ('000000000000000000000000'B),
+        userPriority (7),
+        destinationMACAddr ('FFFFFFFFFFFF'H),
+        expiryTime  ABSENT,
+        channelLoad ABSENT,
+        repeatRate ABSENT,
+        payload ABSENT      -- Assumes BSM payload is generated by the SUT  
+    })
 
 StartBsmTx ::= StartWsmTx (WITH COMPONENTS {
-		psid  (WITH COMPONENTS {content	(32)}),
-		radio,
-		repeatRate,
-		payload ABSENT		-- Assumes BSM payload is generated by the SUT
-	})
+        psid  (WITH COMPONENTS {content (32)}),
+        radio,
+        repeatRate,
+        payload ABSENT      -- Assumes BSM payload is generated by the SUT
+    })
 
 StopBsmTx ::= StopWsmTx (WITH COMPONENTS {
-		psid (WITH COMPONENTS {content	(32)})
-	})
+        psid (WITH COMPONENTS {content  (32)})
+    })
 
 StartBsmRx ::= StartWsmRx (WITH COMPONENTS {
-	psid   (WITH COMPONENTS {content	(32)}), -- PSID is optional if eventHandling.rxFlag is set to receive any WSM with PSID
-	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
-	channelIdentifier,
-	timeSlot,
-	eventHandling
-	})
+    psid   (WITH COMPONENTS {content    (32)}), -- PSID is optional if eventHandling.rxFlag is set to receive any WSM with PSID
+    radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+    channelIdentifier,
+    timeSlot,
+    eventHandling
+    })
 
 StopBsmRx ::= StopWsmRx (WITH COMPONENTS {
-		psid (WITH COMPONENTS {content	(32)})
-	})
+        psid (WITH COMPONENTS {content  (32)})
+    })
 
 EnableGpsInput ::= BOOLEAN
 
@@ -163,10 +164,10 @@ EnableBrakeAvailability ::= BOOLEAN
 EnableIndividualBrakePedalStatus ::= BOOLEAN
 
 SetBrakePedal ::= BIT STRING {
-	frontDriver			(0),
-	forwardPassenger	(1),
-	rearDriver			(2),
-	rearPassenger		(3)
+    frontDriver         (0),
+    forwardPassenger    (1),
+    rearDriver          (2),
+    rearPassenger       (3)
 }
 
 EnableCongestionMitigation ::= BOOLEAN
@@ -176,30 +177,30 @@ SetTemporaryId ::= OCTET STRING (SIZE(4))
 SetMsgCount ::= INTEGER (0..127)
 
 SetVehicleEventFlags ::= BIT STRING {
-	eventHazardLights				(0),
-	eventStopLineViolation			(1), -- Intersection Violation
-	eventABSactivated				(2),
-	eventTractionControlLoss		(3),
-	eventStabilityControlActivated	(4),
-	eventHazardousMaterials			(5),
-	eventReserved1					(6),
-	eventHardBraking        		(7),
-	eventLightsChanged      		(8),
-	eventWipersChanged      		(9),
-	eventFlatTire           		(10),
-	eventDisabledVehicle    		(11), -- DisabledVehicle DF may also be sent
-	eventAirBagDeployment           (12)
+    eventHazardLights               (0),
+    eventStopLineViolation          (1), -- Intersection Violation
+    eventABSactivated               (2),
+    eventTractionControlLoss        (3),
+    eventStabilityControlActivated  (4),
+    eventHazardousMaterials         (5),
+    eventReserved1                  (6),
+    eventHardBraking                (7),
+    eventLightsChanged              (8),
+    eventWipersChanged              (9),
+    eventFlatTire                   (10),
+    eventDisabledVehicle            (11), -- DisabledVehicle DF may also be sent
+    eventAirBagDeployment           (12)
 }
 
 SetVehicleTransmission ::= ENUMERATED {
-	neutral			(0),
-	park			(1),
-	forwardGears	(2),
-	reverseGears	(3),
-	reserved1		(4),
-	reserved2		(5),
-	reserved3		(6),   
-	unavailable		(7)
+    neutral         (0),
+    park            (1),
+    forwardGears    (2),
+    reverseGears    (3),
+    reserved1       (4),
+    reserved2       (5),
+    reserved3       (6),   
+    unavailable     (7)
 }
 
 SetExteriorLightsStatus ::= BIT STRING
@@ -220,14 +221,14 @@ SetExteriorLightsStatus ::= BIT STRING
 */
 
 D2945Indication ::= Indication (WITH COMPONENTS {
-	radio,
-	event (	eWsmPktRx |
-		exception),
-	eventParams	(WITH COMPONENTS {wsm}
-				 ) OPTIONAL,
-	pdu	  OPTIONAL,
-	exception OPTIONAL
-	})
+    radio,
+    event ( eWsmPktRx |
+        exception),
+    eventParams (WITH COMPONENTS {wsm}
+                 ) OPTIONAL,
+    pdu   OPTIONAL,
+    exception OPTIONAL
+    })
 
 
 END
