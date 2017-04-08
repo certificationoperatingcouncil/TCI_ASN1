@@ -1,3 +1,15 @@
+TCI_20170407
+- Several: Converted tabs to spaces
+- TCISutControl: added new messages:
+       requestSutInfo - to request version information from Sut
+       responseInfo - to return version info from Sut
+       setTestId - provide info to SUT about the upcoming test
+- TCIresponseInfo - added defitition for the contents of the SutResponseInfo
+- TCIwsm: added comment regarding using SetWsmTxInfo, StartWsaTxPerdiodic
+- TCICommonTypes: change in comment: spelling of time units in Time64
+- TCIDispatcher: change in comment: fixed time units in time
+- TCI2945 previously checked in separately: several changes to align with changes to the 2945/1 test spec
+
 TCI_20170208
 - TCIwsm: Removed default setting for eventHandling in StartWsmRx
 - TCIDispatcher: commented out TCI16092 in Frame, which is redundant with TCI16093

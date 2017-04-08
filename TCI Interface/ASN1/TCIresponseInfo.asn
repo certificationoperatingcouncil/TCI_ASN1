@@ -15,32 +15,50 @@ Opaque FROM TCI-CommonTypes
 ;
 
 ResponseInfo ::= SEQUENCE {
-	msgID 				MsgID,	
-	resultCode			ResultCode,
-	info				InfoContent	OPTIONAL, -- if exception reported, no InfoContent provided
-	exception			Exception OPTIONAL,
-	...
+    msgID               MsgID,  
+    resultCode          ResultCode,
+    info                InfoContent OPTIONAL, -- if exception reported, no InfoContent provided
+    exception           Exception OPTIONAL,
+    ...
 }
 
 InfoContent::= CHOICE {
-	ipv6InterfaceInfo	[1]	Ipv6InterfaceInfo,
-	
-	...
+    ipv6InterfaceInfo   [1] Ipv6InterfaceInfo,
+    sutInfo             [2] SutInfo,
+    ...
 }
 
 /*
-	IPv6 Interface Information 
+    IPv6 Interface Information 
 */
 
 Ipv6InterfaceInfo ::= SEQUENCE OF SEQUENCE {
-	interfaceName		UTF8String(SIZE(1..255)), -- e.g. "eth0", 
-	ipAddress			SEQUENCE OF IPv6Address, -- linked local, global, etc
-	macAddress			MACaddress, -- MAC address for the network interface
-	defaultGateway		IPv6Address, -- default gateway IPv6 address (assigned via WSA/WRA)
-	primaryDns			IPv6Address, -- primary DNS IPv6 address (assigned via WSA/WRA)
-	gatewayMacAddress	MACaddress, -- gateway Mac address (assigned via WSA/WRA)
-	...
+    interfaceName       UTF8String(SIZE(1..255)), -- e.g. "eth0", 
+    ipAddress           SEQUENCE OF IPv6Address, -- linked local, global, etc
+    macAddress          MACaddress, -- MAC address for the network interface
+    defaultGateway      IPv6Address, -- default gateway IPv6 address (assigned via WSA/WRA)
+    primaryDns          IPv6Address, -- primary DNS IPv6 address (assigned via WSA/WRA)
+    gatewayMacAddress   MACaddress, -- gateway Mac address (assigned via WSA/WRA)
+    ...
 }
 
+SutInfo ::= SEQUENCE {
+    modelName       UTF8String(SIZE(1..255)) OPTIONAL,  -- model name if applicable
+    versionInfo     VersionInfoBlock,
+    ...
+}
+
+VersionInfoBlock ::= SEQUENCE OF SEQUENCE {
+    componentType   INTEGER {            -- type of the component, which version is reported
+                        hardware    (0),    
+                        firmware    (1),
+                        software    (2),    -- for any other software
+                        tciapp      (3)     -- for TCI application version
+                        },
+    versionId       UTF8String(SIZE(1..50)),
+    releaseDate     UTF8String(SIZE(1..50)) OPTIONAL,
+    description     UTF8String(SIZE(1..100)) OPTIONAL,   -- description of the component, e.g. BSM protocol stack
+    ...
+}
 
 END

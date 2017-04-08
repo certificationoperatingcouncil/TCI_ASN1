@@ -158,6 +158,8 @@ StopBsmRx ::= StopWsmRx (WITH COMPONENTS {
     })
 
 EnableGpsInput ::= BOOLEAN
+-- True – use GPS sensor to establish SUT position, speed, heading, etc
+-- False – use data provided by TCI messages to set SUT position, speed, heading, etc
 
 EnableBrakeAvailability ::= BOOLEAN
 
