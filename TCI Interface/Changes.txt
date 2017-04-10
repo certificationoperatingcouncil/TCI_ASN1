@@ -1,3 +1,8 @@
+TCI_20170409-2
+- Added "Test Control Interface Specification  20170410.pdf"
+- Added "Test Control Interface Specification  20170410_changestracked.docx"
+- TCIDispatcher: removed import of TCI16092 module
+
 TCI_20170409-1
 - 1609dot3\wee.asn 
     - Changed constraint in EdcaParameterRecord/ecwMax to 1023
