@@ -1,3 +1,9 @@
+TCI_20170409-1
+- 1609dot3\wee.asn 
+    - Changed constraint in EdcaParameterRecord/ecwMax to 1023
+    - Changed Longitude to J2735 definition
+    - Converted tabs to spaces
+    
 TCI_20170409
 - TCIEventHandling:
       Converted tabs to spaces
