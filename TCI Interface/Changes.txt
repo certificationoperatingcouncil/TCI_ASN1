@@ -1,3 +1,13 @@
+TCI_20170409
+- TCIEventHandling:
+      Converted tabs to spaces
+      set default value for eventFlag - no events
+      fixed incomplete comment for eIcmp6PktRx
+- TCIwsm: StartWsaTxPerdiodic: 
+      added optional dataRate, userPriority, transmitPowerLevel
+      comments for infoElementIncluded
+- Removed TCI16092.asn module from the project, updated TCIProject.a1sproj
+
 TCI_20170407
 - Several: Converted tabs to spaces
 - TCISutControl: added new messages:

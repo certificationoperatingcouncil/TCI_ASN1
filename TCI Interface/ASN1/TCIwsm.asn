@@ -84,7 +84,6 @@ StopWsmRx ::= SEQUENCE{
     ...
 }
 
--- 
 StartWsaTxPerdiodic ::= SEQUENCE{   -- creates WSA with one or more PSIDs via WME-ProviderService.request
     radio                   RadioInterface,
     destinationMACAddr      MACaddress  DEFAULT 'FFFFFFFFFFFF'H,    
@@ -97,11 +96,17 @@ StartWsaTxPerdiodic ::= SEQUENCE{   -- creates WSA with one or more PSIDs via WM
             contentType (mWSA)
         }),
     signatureLifetime       INTEGER(10..30000),     -- in milliseconds
-    infoElementIncluded     WaveElementsIncluded DEFAULT '000000000000000000000000'B,
+    infoElementIncluded     WaveElementsIncluded DEFAULT '000000000000000000000000'B, -- indicates which extensions to include in WSA. Must be consistent with wsaHdrOptInd 
+        -- if all bits for twoDLocation, threeDLocation, repeatRate set to 0, then WSA Header Wave Info is not included, and WSA Header Option Indicator = 0b0xxx, where x=0 or 1
+        -- if optional wra info (see below) is not included, then WSA Header Option Indicator = 0bxxx0
     advertiserId            AdvertiserIdentifier OPTIONAL,
     serviceInfos            ServiceInfos,
     channelinfos            ChannelInfos,
     wra                     RoutingAdvertisement OPTIONAL,
+    -- if the following parameters omitted, use the default values from the SUT MIB
+    dataRate                DataRate80211 OPTIONAL,
+    userPriority            UserPriority OPTIONAL, 
+    transmitPowerLevel      TXpower80211 OPTIONAL,
     ...
 }
 
