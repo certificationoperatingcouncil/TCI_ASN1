@@ -121,9 +121,9 @@ SetLongitude ::= Longitude
 SetElevation ::= Elevation
 
 SetPositionalAccuracy ::= SEQUENCE{
-    SemiMajorAxisAccuracy   INTEGER (0 .. 255),
-    SemiMinorAxisAccuracy   INTEGER (0 .. 255),
-    SemiMajorAxisOrientation   INTEGER (0 .. 65535)
+    semiMajorAxisAccuracy   INTEGER (0 .. 255),
+    semiMinorAxisAccuracy   INTEGER (0 .. 255),
+    semiMajorAxisOrientation   INTEGER (0 .. 65535)
 }
     
 SetTransmissionState ::= ENUMERATED {
@@ -144,44 +144,44 @@ SetHeading ::= INTEGER (0 .. 28800)
 SetSteeringWheelAngle ::= INTEGER (-126 .. 127)
 
 SetAccelerationSet4Way ::= SEQUENCE {
-    LongAcceleration INTEGER (-2000 .. 2001),
-    LatAcceleration INTEGER (-2000 .. 2001),
-    VerticalAcceleration INTEGER (-127 .. 127),
-    YawRate INTEGER (-32767 .. 32767)
+    longAcceleration INTEGER (-2000 .. 2001),
+    latAcceleration INTEGER (-2000 .. 2001),
+    verticalAcceleration INTEGER (-127 .. 127),
+    yawRate INTEGER (-32767 .. 32767)
 }
 
 SetBrakeSystemStatus ::= SEQUENCE {
-    BrakeAppliedStatus       BIT STRING {
+    brakeAppliedStatus       BIT STRING {
         unavailable (0),
         leftFront   (1),
         leftRear    (2),
         rightFront  (3),
         rightRear   (4)
     },
-    TractionControlStatus    BIT STRING {
+    tractionControlStatus    BIT STRING {
         unavailable (0),
         off         (1),
         on          (2),
         engaged     (3)
     },
-    AntiLockBrakeStatus      BIT STRING {
+    antiLockBrakeStatus      BIT STRING {
         unavailable (0),
         off         (1),
         on          (2),
         engaged     (3)
     },
-    StabilityControlStatus   BIT STRING {
+    stabilityControlStatus   BIT STRING {
         unavailable (0),
         off         (1),
         on          (2),
         engaged     (3)
     },
-    BrakeBoostApplied        BIT STRING {
+    brakeBoostApplied        BIT STRING {
         unavailable (0),
         off         (1),
         on          (2)
     },
-    AuxiliaryBrakeStatus     BIT STRING {
+    auxiliaryBrakeStatus     BIT STRING {
         unavailable (0),
         off         (1),
         on          (2),
@@ -190,8 +190,8 @@ SetBrakeSystemStatus ::= SEQUENCE {
 }
 
 SetVehicleSize ::= SEQUENCE{
-    VehicleWidth     INTEGER(0 .. 1023),
-    VehicleLength    INTEGER(0 .. 4095)
+    vehicleWidth     INTEGER(0 .. 1023),
+    vehicleLength    INTEGER(0 .. 4095)
 }
 
 SetVehicleEventFlags ::= BIT STRING {

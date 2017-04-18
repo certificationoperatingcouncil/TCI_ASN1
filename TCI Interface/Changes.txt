@@ -1,3 +1,7 @@
+TCI_20170418
+- TCI29451: fixes for ASN1 compiler errors
+- TCIDispatcher: removed reference to TCI16092
+
 TCI_20170417
 - TCI29451: revised various request messages to align to the 2945/1 test spec
 - Added Test Control Interface Specification  20170417.pdf
