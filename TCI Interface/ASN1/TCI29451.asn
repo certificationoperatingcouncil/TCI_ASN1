@@ -1,4 +1,15 @@
+--File: TCI29451.asn
+--Author: John Liming (john.liming@swri.org)
+--Date Modified: 4/14/2017
+--Purpose: Exercise J2945/1 compliant devices by testing the transmission of all possible BSM configurations,
+--         Assist J2945/1 testing by providing easy access to VehicleEventFlags, 
+--         Assist J2945/1 testing by toggling required but test-interfering aspects of the IUT (GPS, Congestion Control, BSM Transmission). 
+--         This ASN file IS NOT INTENDED to replace in-vehicle testing
+
+--Notes: All value bounds in this document are taken directly from the SAE J2735-2016 standard. Information on the rationale and units of the values can be found in the J2735 standards.
+
 TCI-29451
+
 DEFINITIONS AUTOMATIC TAGS ::= 
 BEGIN
 
@@ -14,9 +25,7 @@ MsgID FROM TCI-CommonTypes
 SetInitialState,
 SetWsmTxInfo, 
 StartWsmTx, 
-StopWsmTx, 
-StartWsmRx, 
-StopWsmRx FROM TCI-wsm
+StopWsmTx FROM TCI-wsm
 
 Indication FROM TCI-indication
 ;
@@ -28,173 +37,96 @@ TCI29451 ::= CHOICE{
 --  responseInfo    [3] ResponseInfo,
     exception       [4] Exception,
     ...
-    } 
+} 
 
 Request ::=  SEQUENCE {
     messageId   MESSAGE-ID-AND-TYPE.&id({MessageTypes}),
     value       MESSAGE-ID-AND-TYPE.&Type({MessageTypes}{@.messageId}),
     ...
-    }
+}
 
 MESSAGE-ID-AND-TYPE ::= CLASS {
     &id    MsgID UNIQUE,
     &Type
-    } WITH SYNTAX {&Type IDENTIFIED BY &id}
+} WITH SYNTAX {&Type IDENTIFIED BY &id}
 
 MessageTypes MESSAGE-ID-AND-TYPE ::= {
     { SetInitialState IDENTIFIED BY setInitialState} |
-    { SetPosition IDENTIFIED BY setPosition} |
-    { ChangePosition IDENTIFIED BY changePosition} |
-    { ChangeSpeed IDENTIFIED BY changeSpeed} |
-    { ChangeHeading IDENTIFIED BY changeHeading} |
-    { ChangeYawRate IDENTIFIED BY changeYawRate} |
-    { ConfigureBsm IDENTIFIED BY configureBsm} |
+    { EnableGpsInput IDENTIFIED BY enableGpsInput} |
     { StartBsmTx IDENTIFIED BY startBsmTx} |
     { StopBsmTx IDENTIFIED BY stopBsmTx} |
-    { StartBsmRx IDENTIFIED BY startBsmRx} |
-    { StopBsmRx IDENTIFIED BY stopBsmRx} |
-    { EnableGpsInput IDENTIFIED BY enableGpsInput} |
-    { EnableBrakeAvailability IDENTIFIED BY enableBrakeAvailability} |
-    { EnableIndividualBrakePedalStatus IDENTIFIED BY enableIndividualBrakePedalStatus} |
     { EnableCongestionMitigation IDENTIFIED BY enableCongestionMitigation} |
-    { SetTemporaryId IDENTIFIED BY setTemporaryId} |
-    { SetMsgCount IDENTIFIED BY setMsgCount} |
-    { SetVehicleEventFlags IDENTIFIED BY setVehicleEventFlags} |
-    { SetVehicleTransmission IDENTIFIED BY setVehicleTransmission } |
-    { SetBrakePedal IDENTIFIED BY setBrakePedal} |
-    { SetExteriorLightsStatus IDENTIFIED BY setExteriorLightsStatus}
+
+    { SetTemporaryID IDENTIFIED BY setTemporaryID} |
+    { SetLatitude IDENTIFIED BY setLatitude} |
+    { SetLongitude IDENTIFIED BY setLongitude} |
+    { SetElevation IDENTIFIED BY setElevation} |
+    { SetPositionalAccuracy IDENTIFIED BY setPositionalAccuracy} |
+    { SetTransmissionState IDENTIFIED BY setTransmissionState} |
+    { SetSpeed IDENTIFIED BY setSpeed} |
+    { SetHeading IDENTIFIED BY setHeading} |
+    { SetSteeringWheelAngle IDENTIFIED BY setSteeringWheelAngle} |
+    { SetAccelerationSet4Way IDENTIFIED BY setAccelerationSet4Way} |
+    { SetBrakeSystemStatus IDENTIFIED BY setBrakeSystemStatus} |
+    { SetVehicleSize IDENTIFIED BY setVehicleSize} |
+    { SetExteriorLights IDENTIFIED BY setExteriorLights} |
+    { SetVehicleEventFlags IDENTIFIED BY setVehicleEventFlags}
 }
 
 setInitialState                     MsgID ::= 1
-setPosition                         MsgID ::= 2
-changePosition                      MsgID ::= 3
-changeSpeed                         MsgID ::= 4
-changeHeading                       MsgID ::= 5
-changeYawRate                       MsgID ::= 6
-enableGpsInput                      MsgID ::= 7
-setVehicleTransmission              MsgID ::= 8
-setExteriorLightsStatus             MsgID ::= 9
-setVehicleEventFlags                MsgID ::= 10
-enableIndividualBrakePedalStatus    MsgID ::= 11
-enableBrakeAvailability             MsgID ::= 12
-enableCongestionMitigation          MsgID ::= 13
-setTemporaryId                      MsgID ::= 14
-setMsgCount                         MsgID ::= 15
-configureBsm                        MsgID ::= 16
-startBsmTx                          MsgID ::= 17
-stopBsmTx                           MsgID ::= 18
-startBsmRx                          MsgID ::= 19
-stopBsmRx                           MsgID ::= 20
-setBrakePedal                       MsgID ::= 21
+enableGpsInput                      MsgID ::= 2
+startBsmTx                          MsgID ::= 3
+stopBsmTx                           MsgID ::= 4
+enableCongestionMitigation          MsgID ::= 5
 
+setTemporaryID                      MsgID ::= 6
+setLatitude                         MsgID ::= 7
+setLongitude                        MsgID ::= 8
+setElevation                        MsgID ::= 9
+setPositionalAccuracy               MsgID ::= 10
+setTransmissionState                MsgID ::= 11
+setSpeed                            MsgID ::= 12
+setHeading                          MsgID ::= 13
+setSteeringWheelAngle               MsgID ::= 14
+setAccelerationSet4Way              MsgID ::= 15
+setBrakeSystemStatus                MsgID ::= 16
+setVehicleSize                      MsgID ::= 17
+setExteriorLights                   MsgID ::= 18
+setVehicleEventFlags                MsgID ::= 19
 
-/* 
-   Request Messages
-*/
-
-SetPosition ::= SEQUENCE{
-    latitude    Latitude,
-    longitude   Longitude,
-    elevation   Elevation
-}
-
-ChangePosition ::= SEQUENCE{
-    deltaLatitude   Latitude,
-    deltaLongitude  Longitude,
-    deltaElevation  Elevation
-}
-
-ChangeSpeed ::= INTEGER(-8191..8191)
--- Speed value
-
-ChangeHeading ::= INTEGER(-28800..28800)
--- Heading offset.
-
-ChangeYawRate ::= INTEGER(-65534..65534)
---Yaw rate offset.
-
-/*
-   Data Types
-*/
-
-ConfigureBsm ::= SetWsmTxInfo (WITH COMPONENTS {
-        psid (WITH COMPONENTS {content  (32)}),
-        radio,
-        security (WITH COMPONENTS { contentType (mBSM) }),
-        channelIdentifier (172),
-        timeslot (continuous),
-        dataRate (6),
-        transmitPowerLevel (20),
-        infoElementsIncluded ('000000000000000000000000'B),
-        userPriority (7),
-        destinationMACAddr ('FFFFFFFFFFFF'H),
-        expiryTime  ABSENT,
-        channelLoad ABSENT,
-        repeatRate ABSENT,
-        payload ABSENT      -- Assumes BSM payload is generated by the SUT  
-    })
-
-StartBsmTx ::= StartWsmTx (WITH COMPONENTS {
-        psid  (WITH COMPONENTS {content (32)}),
-        radio,
-        repeatRate,
-        payload ABSENT      -- Assumes BSM payload is generated by the SUT
-    })
-
-StopBsmTx ::= StopWsmTx (WITH COMPONENTS {
-        psid (WITH COMPONENTS {content  (32)})
-    })
-
-StartBsmRx ::= StartWsmRx (WITH COMPONENTS {
-    psid   (WITH COMPONENTS {content    (32)}), -- PSID is optional if eventHandling.rxFlag is set to receive any WSM with PSID
-    radio ( WITH COMPONENTS { ..., antenna ABSENT }),
-    channelIdentifier,
-    timeSlot,
-    eventHandling
-    })
-
-StopBsmRx ::= StopWsmRx (WITH COMPONENTS {
-        psid (WITH COMPONENTS {content  (32)})
-    })
 
 EnableGpsInput ::= BOOLEAN
 -- True – use GPS sensor to establish SUT position, speed, heading, etc
 -- False – use data provided by TCI messages to set SUT position, speed, heading, etc
 
-EnableBrakeAvailability ::= BOOLEAN
+StartBsmTx ::= StartWsmTx (WITH COMPONENTS {
+    psid  (WITH COMPONENTS {content (32)}),
+    radio,
+    repeatRate,
+    payload ABSENT      -- Assumes BSM payload is generated by the SUT
+})
 
-EnableIndividualBrakePedalStatus ::= BOOLEAN
-
-SetBrakePedal ::= BIT STRING {
-    frontDriver         (0),
-    forwardPassenger    (1),
-    rearDriver          (2),
-    rearPassenger       (3)
-}
+StopBsmTx ::= StopWsmTx (WITH COMPONENTS {
+    psid (WITH COMPONENTS {content  (32)})
+})
 
 EnableCongestionMitigation ::= BOOLEAN
+    
+SetTemporaryID ::= OCTET STRING (SIZE(4))
 
-SetTemporaryId ::= OCTET STRING (SIZE(4))
+SetLatitude ::= Latitude
 
-SetMsgCount ::= INTEGER (0..127)
+SetLongitude ::= Longitude
 
-SetVehicleEventFlags ::= BIT STRING {
-    eventHazardLights               (0),
-    eventStopLineViolation          (1), -- Intersection Violation
-    eventABSactivated               (2),
-    eventTractionControlLoss        (3),
-    eventStabilityControlActivated  (4),
-    eventHazardousMaterials         (5),
-    eventReserved1                  (6),
-    eventHardBraking                (7),
-    eventLightsChanged              (8),
-    eventWipersChanged              (9),
-    eventFlatTire                   (10),
-    eventDisabledVehicle            (11), -- DisabledVehicle DF may also be sent
-    eventAirBagDeployment           (12)
+SetElevation ::= Elevation
+
+SetPositionalAccuracy ::= SEQUENCE{
+    SemiMajorAxisAccuracy   INTEGER (0 .. 255),
+    SemiMinorAxisAccuracy   INTEGER (0 .. 255),
+    SemiMajorAxisOrientation   INTEGER (0 .. 65535)
 }
-
-SetVehicleTransmission ::= ENUMERATED {
+    
+SetTransmissionState ::= ENUMERATED {
     neutral         (0),
     park            (1),
     forwardGears    (2),
@@ -205,7 +137,80 @@ SetVehicleTransmission ::= ENUMERATED {
     unavailable     (7)
 }
 
-SetExteriorLightsStatus ::= BIT STRING
+SetSpeed ::= INTEGER (0 .. 8191)
+
+SetHeading ::= INTEGER (0 .. 28800)
+
+SetSteeringWheelAngle ::= INTEGER (-126 .. 127)
+
+SetAccelerationSet4Way ::= SEQUENCE {
+    LongAcceleration INTEGER (-2000 .. 2001),
+    LatAcceleration INTEGER (-2000 .. 2001),
+    VerticalAcceleration INTEGER (-127 .. 127),
+    YawRate INTEGER (-32767 .. 32767)
+}
+
+SetBrakeSystemStatus ::= SEQUENCE {
+    BrakeAppliedStatus       BIT STRING {
+        unavailable (0),
+        leftFront   (1),
+        leftRear    (2),
+        rightFront  (3),
+        rightRear   (4)
+    },
+    TractionControlStatus    BIT STRING {
+        unavailable (0),
+        off         (1),
+        on          (2),
+        engaged     (3)
+    },
+    AntiLockBrakeStatus      BIT STRING {
+        unavailable (0),
+        off         (1),
+        on          (2),
+        engaged     (3)
+    },
+    StabilityControlStatus   BIT STRING {
+        unavailable (0),
+        off         (1),
+        on          (2),
+        engaged     (3)
+    },
+    BrakeBoostApplied        BIT STRING {
+        unavailable (0),
+        off         (1),
+        on          (2)
+    },
+    AuxiliaryBrakeStatus     BIT STRING {
+        unavailable (0),
+        off         (1),
+        on          (2),
+        reserved    (3)
+    }
+}
+
+SetVehicleSize ::= SEQUENCE{
+    VehicleWidth     INTEGER(0 .. 1023),
+    VehicleLength    INTEGER(0 .. 4095)
+}
+
+SetVehicleEventFlags ::= BIT STRING {
+    eventHazardLights               (0),
+    eventStopLineViolation          (1),
+    eventABSactivated               (2),
+    eventTractionControlLoss        (3),
+    eventStabilityControlActivated  (4),
+    eventHazardousMaterials         (5),
+    eventReserved1                  (6),
+    eventHardBraking                (7),
+    eventLightsChanged              (8),
+    eventWipersChanged              (9),
+    eventFlatTire                   (10),
+    eventDisabledVehicle            (11),
+    eventAirBagDeployment           (12)
+}
+
+SetExteriorLights ::= BIT STRING
 {
    lowBeamHeadlightsOn       (0), 
    highBeamHeadlightsOn      (1), 
@@ -217,6 +222,7 @@ SetExteriorLightsStatus ::= BIT STRING
    fogLightOn                (7), 
    parkingLightsOn           (8) 
 }
+
 
 /* 
    Indication Messages
@@ -230,7 +236,6 @@ D2945Indication ::= Indication (WITH COMPONENTS {
                  ) OPTIONAL,
     pdu   OPTIONAL,
     exception OPTIONAL
-    })
-
+})
 
 END

@@ -1,3 +1,8 @@
+TCI_20170417
+- TCI29451: revised various request messages to align to the 2945/1 test spec
+- Added Test Control Interface Specification  20170417.pdf
+- Added Test Control Interface Specification  20170417_changestracked.docx
+
 TCI_20170409-2
 - Added "Test Control Interface Specification  20170410.pdf"
 - Added "Test Control Interface Specification  20170410_changestracked.docx"
