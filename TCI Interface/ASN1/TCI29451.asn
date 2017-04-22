@@ -23,9 +23,11 @@ Exception,
 MsgID FROM TCI-CommonTypes
 
 SetInitialState,
-SetWsmTxInfo, 
+-- SetWsmTxInfo, 
 StartWsmTx, 
-StopWsmTx FROM TCI-wsm
+StopWsmTx,
+StartWsmRx, 
+StopWsmRx  FROM TCI-wsm
 
 Indication FROM TCI-indication
 ;
@@ -70,7 +72,9 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
     { SetBrakeSystemStatus IDENTIFIED BY setBrakeSystemStatus} |
     { SetVehicleSize IDENTIFIED BY setVehicleSize} |
     { SetExteriorLights IDENTIFIED BY setExteriorLights} |
-    { SetVehicleEventFlags IDENTIFIED BY setVehicleEventFlags}
+    { SetVehicleEventFlags IDENTIFIED BY setVehicleEventFlags} |
+    { StartBsmRx IDENTIFIED BY startBsmRx} |
+    { StopBsmRx IDENTIFIED BY stopBsmRx}
 }
 
 setInitialState                     MsgID ::= 1
@@ -93,11 +97,12 @@ setBrakeSystemStatus                MsgID ::= 16
 setVehicleSize                      MsgID ::= 17
 setExteriorLights                   MsgID ::= 18
 setVehicleEventFlags                MsgID ::= 19
-
+startBsmRx                          MsgID ::= 20
+stopBsmRx                           MsgID ::= 21
 
 EnableGpsInput ::= BOOLEAN
--- True – use GPS sensor to establish SUT position, speed, heading, etc
--- False – use data provided by TCI messages to set SUT position, speed, heading, etc
+-- True : use GPS sensor to establish SUT position, speed, heading, etc
+-- False: use data provided by TCI messages to set SUT position, speed, heading, etc
 
 StartBsmTx ::= StartWsmTx (WITH COMPONENTS {
     psid  (WITH COMPONENTS {content (32)}),
@@ -109,6 +114,18 @@ StartBsmTx ::= StartWsmTx (WITH COMPONENTS {
 StopBsmTx ::= StopWsmTx (WITH COMPONENTS {
     psid (WITH COMPONENTS {content  (32)})
 })
+
+StartBsmRx ::= StartWsmRx (WITH COMPONENTS {
+    psid   (WITH COMPONENTS {content    (32)}), -- PSID is optional if eventHandling.rxFlag is set to receive any WSM with PSID
+    radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+    channelIdentifier (172),        -- default value for BSM
+    timeSlot (continuous),          -- default value for BSM
+    eventHandling
+    })
+
+StopBsmRx ::= StopWsmRx (WITH COMPONENTS {
+        psid (WITH COMPONENTS {content  (32)})
+    })
 
 EnableCongestionMitigation ::= BOOLEAN
     
