@@ -1,3 +1,8 @@
+TCI_20170421
+- TCI29451: added StartBsmRx, stopBsmRx, previously deleted
+- Added Test Control Interface Specification  20170421.pdf
+- Added Test Control Interface Specification  20170421_changestracked.docx
+
 TCI_20170418
 - TCI29451: fixes for ASN1 compiler errors
 - TCIDispatcher: removed reference to TCI16092
