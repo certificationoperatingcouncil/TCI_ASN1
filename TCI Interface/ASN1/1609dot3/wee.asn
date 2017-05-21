@@ -122,7 +122,7 @@ EdcaParameterRecord ::= SEQUENCE {
     aci INTEGER (0..3),
     acm     INTEGER (0..1),
     aifsn   INTEGER (0..15),
-    ecwMax  INTEGER (0..1023),
+    ecwMax  INTEGER (0..15),    -- ecwMax is the exponent in CWmax = 2^ecwMax-1
     ecwMin  INTEGER (0..15),
     txopLimit   INTEGER (0..65535)
     }
