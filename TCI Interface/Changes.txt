@@ -1,3 +1,6 @@
+TCI_20170616
+- TCI16093: In Dot3Indication added {security} to eventParams
+
 TCI_20170421
 - TCI29451: added StartBsmRx, stopBsmRx, previously deleted
 - Added Test Control Interface Specification  20170421.pdf

@@ -153,7 +153,8 @@ Dot3Indication ::= Indication (WITH COMPONENTS {
 			exception),
 	eventParams	(WITH COMPONENTS {service} |
 				 WITH COMPONENTS {wsm} |
-				 WITH COMPONENTS {ip}
+				 WITH COMPONENTS {ip} |
+				 WITH COMPONENTS {security}
 				 ) OPTIONAL,
 	pdu	OPTIONAL,
 	exception OPTIONAL
