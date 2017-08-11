@@ -1,3 +1,8 @@
+TCI_20170810
+- TCIIP: Added new messages AddTxProfile, DelTxProfile to support IPv6 testing without WSA
+- TCIWSM: Modified AddUserService, added optional parameters  wsaChannelIdentifier, channelAccess
+- TCICommonTypes: removed unused CodingRate ENUM
+
 TCI_20170616
 - TCI16093: In Dot3Indication added {security} to eventParams
 

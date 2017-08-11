@@ -83,23 +83,6 @@ Antenna ::= ENUMERATED {
     both        (3)
 }
 
-/*
-CodingRate ::= ENUMERATED {
-    -- see Table 9-5—Non-HT reference rate 802.11 - 2012 pp864
-    -- update with table 18-4 on 802.11 - 2012 pp1590
-    r6Mbps-12BPSK   (11),
-    r9Mbps-34BPSK   (15),
-    r12Mbps-12QPSK  (10),
-    r18Mbps-34QPSK  (14),
-    r24Mbps-1216QAM (9),
-    r36Mbps-3416QAM (13),
-    r48Mbps-2364QAM (8),
-    r54Mbps-3464QAM (12),
-    default (0),            --Use default data rate
-    trc (1)                 --Use transmit rate control (currently unused)
-}
-*/
-
 TimeSlot ::= ENUMERATED {    -- consistent with dot3
     alt-slot0       (1),
     alt-slot1       (2),

@@ -3,8 +3,15 @@ DEFINITIONS AUTOMATIC TAGS ::=
 BEGIN
 
 IMPORTS
-IPv6Address, ServicePort FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
 
+EdcaParameterSet,
+DataRate80211,
+TXpower80211, 
+ChannelNumber80211,
+IPv6Address, 
+ServicePort FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
+
+TimeSlot,
 RepeatRate, 
 Opaque, 
 RadioInterface FROM TCI-CommonTypes
@@ -12,98 +19,117 @@ RadioInterface FROM TCI-CommonTypes
 EventHandling FROM TCI-eventHandling
 ;
 
-GetIPv6InterfaceInfo ::= SEQUENCE{
-	radio				RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
-	...
+AddTxProfile ::= SEQUENCE{      -- usage per IEEE1609.3-2016 6.2.3.3 Assignments in support of provider service requests; 6.2.3.4 Assignments in support of user service requests
+    radio                   RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
+    channelIdentifier       ChannelNumber80211,         -- for MLMEX-CHSTART.request, MLMEX-REGISTERTXPROFILE.request
+    timeslot                TimeSlot,                   -- for MLMEX-CHSTART.request
+    operationalRateSet      OCTET STRING OPTIONAL,      -- for MLMEX-CHSTART.request; adopted IEEE802.11 definition; note 1609.4 specifies it as INT(1-127) and refers to IEEE802.11
+    edcaParameterSet        EdcaParameterSet OPTIONAL,  -- for MLMEX-CHSTART.request; if omitted use default EDCA set
+    immediateAccess         INTEGER(0..255) OPTIONAL,   -- for MLMEX-CHSTART.request; value 0 indicates immediate access no requested
+    adaptable               BOOLEAN,                    -- for MLMEX-REGISTERTXPROFILE.request
+    transmitPowerLevel      TXpower80211,               -- for MLMEX-REGISTERTXPROFILE.request SUT must convert it into TxPwr_Level INTEGER(1-8) corresponding to IEEE802.11 MIB dot11PhyTxPowerEntry
+    dataRate                DataRate80211,              -- for MLMEX-REGISTERTXPROFILE.request value range INTEGER(2..127) encoded per IEEE802.11 for dot11SupportedDataRatesTxTable
+    ...
 }
 
-SetIPv6Address ::= SEQUENCE{		-- WME-AddressChange.request
-	radio				RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
-	interfaceName		UTF8String(SIZE(1..255)),
-	ipAddress			IPv6Address OPTIONAL, 
-	-- optional if the new IPv6 address value must be selected at random
-	...
+DelTxProfile ::= SEQUENCE{      -- usage per IEEE1609.3-2016 6.2.3.6 Ending service channel access assignments
+    radio               RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
+    channelIdentifier   ChannelNumber80211,         -- for MLMEX-CHEND.request, MLMEX-DELETETXPROFILE.request 
+    ...
+}
+
+GetIPv6InterfaceInfo ::= SEQUENCE{
+    radio               RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
+    ...
+}
+
+SetIPv6Address ::= SEQUENCE{        -- WME-AddressChange.request
+    radio               RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
+    interfaceName       UTF8String(SIZE(1..255)),
+    ipAddress           IPv6Address OPTIONAL, 
+    -- optional if the new IPv6 address value must be selected at random
+    ...
 }
 
 IPv6TxRecord ::= SEQUENCE{
-	radio				RadioInterface,
-	interfaceName		UTF8String(SIZE(1..255)),
-	destIpAddress		IPv6Address,
-	destPort			ServicePort OPTIONAL,
-	protocol			ENUMERATED { tcp, udp, icmp },
-	repeatRate      	RepeatRate OPTIONAL,
-	eventHandling       EventHandling  (WITH COMPONENTS {..., eventFlag }) OPTIONAL,
-	payload		    	Opaque OPTIONAL,
-	...
+    radio               RadioInterface,
+    interfaceName       UTF8String(SIZE(1..255)),
+    destIpAddress       IPv6Address,
+    destPort            ServicePort OPTIONAL,
+    protocol            ENUMERATED { tcp, udp, icmp },
+    repeatRate          RepeatRate OPTIONAL,
+    eventHandling       EventHandling  (WITH COMPONENTS {..., eventFlag }) OPTIONAL,
+    payload             Opaque OPTIONAL,
+    ...
 }
 
 StartIPv6Tx ::= IPv6TxRecord (WITH COMPONENTS {
-	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
-	interfaceName,
-	destIpAddress,
-	destPort,
-	protocol,
-	repeatRate OPTIONAL,
-	eventHandling OPTIONAL,
-	payload PRESENT
+    radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+    interfaceName,
+    destIpAddress,
+    destPort,
+    protocol,
+    repeatRate OPTIONAL,
+    eventHandling OPTIONAL,
+    payload PRESENT
 })
  
 StopIPv6Tx ::= IPv6TxRecord (WITH COMPONENTS {
-	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
-	interfaceName,
-	destIpAddress,
-	destPort,
-	protocol,
-	repeatRate ABSENT,
-	eventHandling ABSENT,
-	payload ABSENT
+    radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+    interfaceName,
+    destIpAddress,
+    destPort,
+    protocol,
+    repeatRate ABSENT,
+    eventHandling ABSENT,
+    payload ABSENT
 })
 
 StartIPv6Ping ::= IPv6TxRecord (WITH COMPONENTS {
-	radio,
-	interfaceName,
-	destIpAddress,
-	destPort ABSENT,
-	protocol (icmp),
-	repeatRate OPTIONAL,
-	eventHandling	(WITH COMPONENTS {..., eventFlag ({eIcmp6PktRx}) }),
-	payload ABSENT
-	})
+    radio,
+    interfaceName,
+    destIpAddress,
+    destPort ABSENT,
+    protocol (icmp),
+    repeatRate OPTIONAL,
+    eventHandling   (WITH COMPONENTS {..., eventFlag ({eIcmp6PktRx}) }),
+    payload ABSENT
+    })
 
 StopIPv6Ping ::= IPv6TxRecord (WITH COMPONENTS {
-	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
-	interfaceName,
-	destIpAddress,
-	destPort ABSENT,
-	protocol (icmp),
-	repeatRate ABSENT,
-	eventHandling ABSENT,
-	payload ABSENT
+    radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+    interfaceName,
+    destIpAddress,
+    destPort ABSENT,
+    protocol (icmp),
+    repeatRate ABSENT,
+    eventHandling ABSENT,
+    payload ABSENT
 })
 
 IPv6RxRecord ::= SEQUENCE{
-	radio				RadioInterface,
-	interfaceName		UTF8String(SIZE(1..255)),
-	listenPort			ServicePort,
-	protocol			ENUMERATED { tcp (0), udp (1) },
-	eventHandling		EventHandling (WITH COMPONENTS {..., eventFlag ({eIpv6PktRx}) }) OPTIONAL,
-	...
+    radio               RadioInterface,
+    interfaceName       UTF8String(SIZE(1..255)),
+    listenPort          ServicePort,
+    protocol            ENUMERATED { tcp (0), udp (1) },
+    eventHandling       EventHandling (WITH COMPONENTS {..., eventFlag ({eIpv6PktRx}) }) OPTIONAL,
+    ...
 }
 
 StartIPv6Rx ::= IPv6RxRecord (WITH COMPONENTS {
-	radio,
-	interfaceName,
-	listenPort,
-	protocol,
-	eventHandling PRESENT
+    radio,
+    interfaceName,
+    listenPort,
+    protocol,
+    eventHandling PRESENT
 })
 
 StopIPv6Rx ::= IPv6RxRecord ( WITH COMPONENTS {
-	radio ( WITH COMPONENTS { ..., antenna ABSENT }),
-	interfaceName,
-	listenPort,
-	protocol,
-	eventHandling ABSENT
+    radio ( WITH COMPONENTS { ..., antenna ABSENT }),
+    interfaceName,
+    listenPort,
+    protocol,
+    eventHandling ABSENT
 })
 
 END

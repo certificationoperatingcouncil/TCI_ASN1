@@ -139,11 +139,13 @@ AddUserService ::= SEQUENCE{    -- register user service via WME-UserService.req
     userRequestType         UserRequestType,                -- autojoin on match, vs noSch
     wsaType                 WsaType,                        -- secure or unsecure
     providerServiceContext  ProviderServiceContext OPTIONAL,
-    channelIdentifier       ChannelNumber80211 OPTIONAL,
-    sourceMACAddr           MACaddress OPTIONAL,
-    advertiserId            AdvertiserIdentifier OPTIONAL,
+    channelIdentifier       ChannelNumber80211 OPTIONAL,    -- desired Sch channel for desired application service
+    sourceMACAddr           MACaddress OPTIONAL,            -- address of the sender of the WSA
+    advertiserId            AdvertiserIdentifier OPTIONAL,  -- optionally sent in the WSA
     linkQuality             INTEGER OPTIONAL,
-    immediateAccess         INTEGER(0..255) OPTIONAL,
+    immediateAccess         INTEGER(0..255) OPTIONAL,       -- duration in sync intervals, value of 0 indicates immediate access not requested
+    wsaChannelIdentifier    ChannelNumber80211 OPTIONAL,    -- channel to listen for WSA, if omitted, use default CCH178
+    channelAccess           TimeSlot OPTIONAL,              -- timeslot to listen for WSA, if omitted, use default Timeslot 0
     ...
 }
     
