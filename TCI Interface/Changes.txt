@@ -1,3 +1,6 @@
+TCI_20170810-1
+- TCI16094: added AddTxProfile, DelTxProfile   
+
 TCI_20170810
 - TCIIP: Added new messages AddTxProfile, DelTxProfile to support IPv6 testing without WSA
 - TCIWSM: Modified AddUserService, added optional parameters  wsaChannelIdentifier, channelAccess
