@@ -14,6 +14,8 @@ StopWsmTx,
 StartWsmRx, 
 StopWsmRx FROM TCI-wsm
 
+AddTxProfile,
+DelTxProfile,
 GetIPv6InterfaceInfo, 
 StartIPv6Tx, 
 StopIPv6Tx, 
@@ -31,13 +33,13 @@ Indication FROM TCI-indication
 ;
 
 TCI16094 ::= CHOICE{
-	request			[0]	Request,
-	response		[1]	Response,
-	indication 		[2] Dot4Indication,
-	responseInfo	[3]	Dot4ResponseInfo,
-	exception		[4] Exception,
-	...
-	} 
+    request         [0] Request,
+    response        [1] Response,
+    indication      [2] Dot4Indication,
+    responseInfo    [3] Dot4ResponseInfo,
+    exception       [4] Exception,
+    ...
+    } 
 
 Request ::=  SEQUENCE {
    messageId   MESSAGE-ID-AND-TYPE.&id({MessageTypes}),
@@ -52,80 +54,86 @@ MESSAGE-ID-AND-TYPE ::= CLASS {
 
 MessageTypes MESSAGE-ID-AND-TYPE ::= {
 -- imported from TCI-wsm
-	{ SetInitialState IDENTIFIED BY setInitialState} |
-	{ Dot4SetWsmTxInfo IDENTIFIED BY setWsmTxInfo} |
-	{ Dot4StartWsmTx IDENTIFIED BY startWsmTx} |
-	{ StopWsmTx IDENTIFIED BY stopWsmTx} |
-	{ StartWsmRx IDENTIFIED BY startWsmRx} |
-	{ StopWsmRx IDENTIFIED BY stopWsmRx} |
+    { SetInitialState IDENTIFIED BY setInitialState} |
+    { Dot4SetWsmTxInfo IDENTIFIED BY setWsmTxInfo} |
+    { Dot4StartWsmTx IDENTIFIED BY startWsmTx} |
+    { StopWsmTx IDENTIFIED BY stopWsmTx} |
+    { StartWsmRx IDENTIFIED BY startWsmRx} |
+    { StopWsmRx IDENTIFIED BY stopWsmRx} |
 -- imported from TCI-ip module
-	{ GetIPv6InterfaceInfo IDENTIFIED BY getIpv6InterfaceInfo} |
-	{ SetIPv6Address IDENTIFIED BY setIpv6Address} |
-	{ StartIPv6Tx IDENTIFIED BY startIPv6Tx} |
-	{ StopIPv6Tx IDENTIFIED BY stopIPv6Tx} |
-	{ StartIPv6Rx IDENTIFIED BY startIPv6Rx} |
-	{ StopIPv6Rx IDENTIFIED BY stopIPv6Rx} |
-	{ StartIPv6Ping IDENTIFIED BY startIpv6Ping} |
-	{ StopIPv6Ping IDENTIFIED BY stopIpv6Ping} 
+    { GetIPv6InterfaceInfo IDENTIFIED BY getIpv6InterfaceInfo} |
+    { SetIPv6Address IDENTIFIED BY setIpv6Address} |
+    { StartIPv6Tx IDENTIFIED BY startIPv6Tx} |
+    { StopIPv6Tx IDENTIFIED BY stopIPv6Tx} |
+    { StartIPv6Rx IDENTIFIED BY startIPv6Rx} |
+    { StopIPv6Rx IDENTIFIED BY stopIPv6Rx} |
+    { StartIPv6Ping IDENTIFIED BY startIpv6Ping} |
+    { StopIPv6Ping IDENTIFIED BY stopIpv6Ping} |
+    { AddTxProfile IDENTIFIED BY addTxProfile} |
+    { DelTxProfile IDENTIFIED BY delTxProfile} 
 }
 
-setInitialState     	MsgID ::= 1
-setWsmTxInfo     		MsgID ::= 2
-startWsmTx     			MsgID ::= 3
-stopWsmTx		     	MsgID ::= 4
-startWsmRx     			MsgID ::= 5
-stopWsmRx     			MsgID ::= 6
-getIpv6InterfaceInfo	MsgID ::= 7
-setIpv6Address			MsgID ::= 8
-startIPv6Tx				MsgID ::= 9
-stopIPv6Tx				MsgID ::= 10
-startIPv6Rx				MsgID ::= 11
-stopIPv6Rx				MsgID ::= 12
-startIpv6Ping			MsgID ::= 13
-stopIpv6Ping			MsgID ::= 14
+setInitialState         MsgID ::= 1
+setWsmTxInfo            MsgID ::= 2
+startWsmTx              MsgID ::= 3
+stopWsmTx               MsgID ::= 4
+startWsmRx              MsgID ::= 5
+stopWsmRx               MsgID ::= 6
+getIpv6InterfaceInfo    MsgID ::= 7
+setIpv6Address          MsgID ::= 8
+startIPv6Tx             MsgID ::= 9
+stopIPv6Tx              MsgID ::= 10
+startIPv6Rx             MsgID ::= 11
+stopIPv6Rx              MsgID ::= 12
+startIpv6Ping           MsgID ::= 13
+stopIpv6Ping            MsgID ::= 14
+addTxProfile            MsgID ::= 15
+delTxProfile            MsgID ::= 16
 
 /* 
    Request Messages
 
-	SetInitialState, 
-	SetWsmTxInfo, 
-	StartWsmTx, 
-	StopWsmTx, 
-	StartWsmRx, 
-	StopWsmRx FROM TCI-wsm
+    SetInitialState, 
+    SetWsmTxInfo, 
+    StartWsmTx, 
+    StopWsmTx, 
+    StartWsmRx, 
+    StopWsmRx FROM TCI-wsm
 
-	GetIPv6InterfaceInfo, 
-	StartIPv6Tx, 
-	StopIPv6Tx, 
-	StartIPv6Rx, 
-	StopIPv6Rx, 
-	SetIPv6Address, 
-	StartIPv6Ping,
-	StopIPv6Ping FROM TCI-ip
+    addTxProfile,
+    delTxProfile,
+    GetIPv6InterfaceInfo, 
+    StartIPv6Tx, 
+    StopIPv6Tx, 
+    StartIPv6Rx, 
+    StopIPv6Rx, 
+    SetIPv6Address, 
+    StartIPv6Ping,
+    StopIPv6Ping FROM TCI-ip
 */
 
 Dot4SetWsmTxInfo ::= SetWsmTxInfo (WITH COMPONENTS {
-	psid,
-	radio,
-	security,
-	channelIdentifier,
-	timeslot,
-	dataRate,
-	transmitPowerLevel,
-	infoElementsIncluded,
-	userPriority,
-	destinationMACAddr ('FFFFFFFFFFFF'H),
-	expiryTime	ABSENT,
-	channelLoad	ABSENT,
-	repeatRate ABSENT,
-	payload ABSENT
+    psid,
+    radio,
+    security,
+    channelIdentifier,
+    timeslot,
+    dataRate,
+    transmitPowerLevel,
+    infoElementsIncluded,
+    userPriority,
+    destinationMACAddr ('FFFFFFFFFFFF'H),
+    expiryTime  ABSENT,
+    channelLoad ABSENT,
+    repeatRate ABSENT,
+    payload ABSENT
 })
 
 Dot4StartWsmTx ::= StartWsmTx (WITH COMPONENTS {
-	psid,
-	radio,
-	repeatRate,
-	payload	PRESENT
+    psid,
+    radio,
+    repeatRate,
+    payload PRESENT
 })
 
 /* 
@@ -133,32 +141,32 @@ Dot4StartWsmTx ::= StartWsmTx (WITH COMPONENTS {
 */
 
 Dot4Indication ::= Indication (WITH COMPONENTS {
-	radio,
-	event (	e16093PktRx | 
-			eWsmPktRx | 
-			eIpv6PktRx | 
-			eIcmp6PktRx | 
-			eIpv6ConfigChanged | 
-			eDot3ChannelAssigned | 
-			eDot3RequestMatchedAvailAppService | 
-			exception),
-	eventParams	(WITH COMPONENTS {service} |
-				 WITH COMPONENTS {wsm} |
-				 WITH COMPONENTS {ip}
-				 ) OPTIONAL,
-	pdu	OPTIONAL,
-	exception OPTIONAL
-	})
+    radio,
+    event ( e16093PktRx | 
+            eWsmPktRx | 
+            eIpv6PktRx | 
+            eIcmp6PktRx | 
+            eIpv6ConfigChanged | 
+            eDot3ChannelAssigned | 
+            eDot3RequestMatchedAvailAppService | 
+            exception),
+    eventParams (WITH COMPONENTS {service} |
+                 WITH COMPONENTS {wsm} |
+                 WITH COMPONENTS {ip}
+                 ) OPTIONAL,
+    pdu OPTIONAL,
+    exception OPTIONAL
+    })
 
 /* 
    ResponseInfo Messages
 */
 
 Dot4ResponseInfo ::= ResponseInfo (WITH COMPONENTS {
-	msgID,	
-	resultCode,
-	info (WITH COMPONENTS {ipv6InterfaceInfo}  ) OPTIONAL, -- if exception reported, no InfoContent provided
-	exception OPTIONAL
-	})
+    msgID,  
+    resultCode,
+    info (WITH COMPONENTS {ipv6InterfaceInfo}  ) OPTIONAL, -- if exception reported, no InfoContent provided
+    exception OPTIONAL
+    })
 
 END
