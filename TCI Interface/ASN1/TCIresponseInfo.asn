@@ -36,9 +36,9 @@ Ipv6InterfaceInfo ::= SEQUENCE OF SEQUENCE {
     interfaceName       UTF8String(SIZE(1..255)), -- e.g. "eth0", 
     ipAddress           SEQUENCE OF IPv6Address, -- linked local, global, etc
     macAddress          MACaddress, -- MAC address for the network interface
-    defaultGateway      IPv6Address, -- default gateway IPv6 address (assigned via WSA/WRA)
-    primaryDns          IPv6Address, -- primary DNS IPv6 address (assigned via WSA/WRA)
-    gatewayMacAddress   MACaddress, -- gateway Mac address (assigned via WSA/WRA)
+    defaultGateway      IPv6Address OPTIONAL, -- default gateway IPv6 address (assigned via WSA/WRA)
+    primaryDns          IPv6Address OPTIONAL, -- primary DNS IPv6 address (assigned via WSA/WRA)
+    gatewayMacAddress   MACaddress OPTIONAL, -- gateway Mac address (assigned via WSA/WRA)
     ...
 }
 

@@ -1,3 +1,7 @@
+TCI_20170814
+- TCIwsm: AddUserService. Added eventHandling field
+- TCIrespondInfo: Ipv6InterfaceInfo: defaultGateway/primaryDns/gatewayMacAddress changed to optional
+
 TCI_20170810-1
 - TCI16094: added AddTxProfile, DelTxProfile   
 
