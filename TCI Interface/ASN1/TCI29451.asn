@@ -1,6 +1,3 @@
---File: TCI29451.asn
---Author: John Liming (john.liming@swri.org)
---Date Modified: 4/14/2017
 --Purpose: Exercise J2945/1 compliant devices by testing the transmission of all possible BSM configurations,
 --         Assist J2945/1 testing by providing easy access to VehicleEventFlags, 
 --         Assist J2945/1 testing by toggling required but test-interfering aspects of the IUT (GPS, Congestion Control, BSM Transmission). 
@@ -20,6 +17,7 @@ Latitude  FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) stan
 
 Response, 
 Exception, 
+Time64,
 MsgID FROM TCI-CommonTypes
 
 SetInitialState,
@@ -74,7 +72,8 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
     { SetExteriorLights IDENTIFIED BY setExteriorLights} |
     { SetVehicleEventFlags IDENTIFIED BY setVehicleEventFlags} |
     { StartBsmRx IDENTIFIED BY startBsmRx} |
-    { StopBsmRx IDENTIFIED BY stopBsmRx}
+    { StopBsmRx IDENTIFIED BY stopBsmRx} |
+    { SetGpsTime IDENTIFIED BY setGpsTime}    
 }
 
 setInitialState                     MsgID ::= 1
@@ -99,6 +98,7 @@ setExteriorLights                   MsgID ::= 18
 setVehicleEventFlags                MsgID ::= 19
 startBsmRx                          MsgID ::= 20
 stopBsmRx                           MsgID ::= 21
+setGpsTime                          MsgID ::= 22
 
 EnableGpsInput ::= BOOLEAN
 -- True : use GPS sensor to establish SUT position, speed, heading, etc
@@ -130,6 +130,8 @@ StopBsmRx ::= StopWsmRx (WITH COMPONENTS {
 EnableCongestionMitigation ::= BOOLEAN
     
 SetTemporaryID ::= OCTET STRING (SIZE(4))
+
+SetGpsTime ::= Time64
 
 SetLatitude ::= Latitude
 
@@ -175,30 +177,30 @@ SetBrakeSystemStatus ::= SEQUENCE {
         rightFront  (3),
         rightRear   (4)
     },
-    tractionControlStatus    BIT STRING {
+    tractionControlStatus    ENUMERATED {
         unavailable (0),
         off         (1),
         on          (2),
         engaged     (3)
     },
-    antiLockBrakeStatus      BIT STRING {
+    antiLockBrakeStatus      ENUMERATED {
         unavailable (0),
         off         (1),
         on          (2),
         engaged     (3)
     },
-    stabilityControlStatus   BIT STRING {
+    stabilityControlStatus   ENUMERATED {
         unavailable (0),
         off         (1),
         on          (2),
         engaged     (3)
     },
-    brakeBoostApplied        BIT STRING {
+    brakeBoostApplied        ENUMERATED {
         unavailable (0),
         off         (1),
         on          (2)
     },
-    auxiliaryBrakeStatus     BIT STRING {
+    auxiliaryBrakeStatus     ENUMERATED {
         unavailable (0),
         off         (1),
         on          (2),

@@ -86,6 +86,7 @@ WsmParameters ::= SEQUENCE{	-- used in EventParams
 IpParameters ::= SEQUENCE{ -- used in EventParams
 	interfaceName			UTF8String(SIZE(1..255)),
 	sourceIPaddress			IPv6Address,
+    protocol                ENUMERATED { tcp, udp, icmpv6 }, -- Upper Layer protocol used for the IPv6 PDU provided in the same TCI indication.
 	...
 }
 

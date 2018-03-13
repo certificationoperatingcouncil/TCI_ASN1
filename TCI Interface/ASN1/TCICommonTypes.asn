@@ -46,9 +46,9 @@ Exception ::= SEQUENCE{
 }
 
 ExceptionType   ::= ENUMERATED{
-    info,       -- all info messages
-    warning,    -- all warnings
-    error       -- all errors
+    info        (0), -- all info messages
+    warning     (1), -- all warnings
+    error       (2)  -- all errors
 }
 
 Module ::= UTF8String (SIZE(0..255))
