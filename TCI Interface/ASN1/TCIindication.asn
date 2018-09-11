@@ -76,7 +76,7 @@ WsmParameters ::= SEQUENCE{	-- used in EventParams
 	radio					RadioInterface ( WITH COMPONENTS { ..., antenna ABSENT }),
 	wsmpVersion				INTEGER(0..15),
 	channelIdentifier		ChannelNumber80211,
-	timeslot				TimeSlot,
+	-- timeslot				TimeSlot,               //ELIMINATED due to CR implementation
 	dataRate				DataRate80211,
 	receivePowerLevel		TXpower80211,
 	sourceMACAddr			MACaddress,

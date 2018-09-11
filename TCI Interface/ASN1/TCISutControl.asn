@@ -5,9 +5,14 @@ DEFINITIONS AUTOMATIC TAGS ::= BEGIN
 IMPORTS
 Response,
 MsgID, 
+Time64,
 Exception FROM TCI-CommonTypes
 
 ResponseInfo FROM TCI-responseInfo
+
+Elevation, 
+Longitude, 
+Latitude  FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
 ;
 
 TCISutControl ::= CHOICE{
@@ -34,7 +39,17 @@ MessageTypes MESSAGE-ID-AND-TYPE ::= {
     { Restart IDENTIFIED BY restart} |
     { RequestSutAvailability IDENTIFIED BY requestSutAvailability} |
     { RequestSutInfo IDENTIFIED BY requestSutInfo} |
-    { SetTestId IDENTIFIED BY setTestId} 
+    { SetTestId IDENTIFIED BY setTestId} |
+    
+    { EnableGpsInput IDENTIFIED BY enableGpsInput} |
+    { SetLatitude IDENTIFIED BY setLatitude} |
+    { SetLongitude IDENTIFIED BY setLongitude} |
+    { SetElevation IDENTIFIED BY setElevation} |
+    { SetPositionalAccuracy IDENTIFIED BY setPositionalAccuracy} |
+    { SetSpeed IDENTIFIED BY setSpeed} |
+    { SetHeading IDENTIFIED BY setHeading} |
+    { SetAccelerationSet4Way IDENTIFIED BY setAccelerationSet4Way} |
+    { SetGpsTime IDENTIFIED BY setGpsTime}
 }
 
 shutdown                    MsgID ::= 1
@@ -42,6 +57,15 @@ restart                     MsgID ::= 2
 requestSutAvailability      MsgID ::= 3
 requestSutInfo              MsgID ::= 4
 setTestId                   MsgID ::= 5
+enableGpsInput              MsgID ::= 6
+setLatitude                 MsgID ::= 7
+setLongitude                MsgID ::= 8
+setElevation                MsgID ::= 9
+setPositionalAccuracy       MsgID ::= 10
+setSpeed                    MsgID ::= 11
+setHeading                  MsgID ::= 12
+setAccelerationSet4Way      MsgID ::= 13
+setGpsTime                  MsgID ::= 14
 
 SetTestId ::= UTF8String(SIZE(1..255))
 
@@ -60,4 +84,33 @@ SutResponseInfo ::= ResponseInfo (WITH COMPONENTS {
     exception OPTIONAL
     })
 
+EnableGpsInput ::= BOOLEAN
+-- True : use GPS sensor to establish SUT position, speed, heading, etc
+-- False: use data provided by TCI messages to set SUT position, speed, heading, etc    
+
+SetGpsTime ::= Time64
+
+SetLatitude ::= Latitude
+
+SetLongitude ::= Longitude
+
+SetElevation ::= Elevation
+
+SetPositionalAccuracy ::= SEQUENCE{
+    semiMajorAxisAccuracy   INTEGER (0 .. 255),
+    semiMinorAxisAccuracy   INTEGER (0 .. 255),
+    semiMajorAxisOrientation   INTEGER (0 .. 65535)
+}
+
+SetSpeed ::= INTEGER (0 .. 8191)
+
+SetHeading ::= INTEGER (0 .. 28800)
+
+SetAccelerationSet4Way ::= SEQUENCE {
+    longAcceleration INTEGER (-2000 .. 2001),
+    latAcceleration INTEGER (-2000 .. 2001),
+    verticalAcceleration INTEGER (-127 .. 127),
+    yawRate INTEGER (-32767 .. 32767)
+}
+    
 END

@@ -8,8 +8,8 @@ VarLengthNumber FROM CITSapplMgmtIDs {iso(1) standard(0) cits-applMgmt (17419) i
 
 PduData ::= Opaque
 PduType ::= ENUMERATED {
-    d80211frame         (1),    -- 802.11 frame (802.11 header, MAC header)
-    d16093frame         (2),    -- WSM frame, including WSM header & payload
+    d80211frame         (1),    -- 802.11 frame (802.11 header, MAC header) // DEPRECATED. Use d16093payload instead
+    d16093frame         (2),    -- WSM frame, including WSM header & payload  // DEPRECATED. Use d16093payload instead
     d16092data          (3),    -- Ieee1609Data including 1609.3 payload
     d16093payload       (4),    -- 1609.3 payload excluding security header/footer
     dIpv6payload        (5)     -- Ipv6 payload
