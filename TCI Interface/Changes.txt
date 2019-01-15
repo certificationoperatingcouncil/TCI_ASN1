@@ -1,3 +1,18 @@
+Branch: ChangeRequest
+TCI_20180910 implementation of OmniAir TWG CRs
+- EventHandling: added eventParamsChoice and eventParamsChoice structure
+- TCIInidication: WsmParameters: removed timeslot
+- TCICommonType: added comment deprecating d80211frame and d16093frame
+- TCISutControl/TCI2945: moved definitions from TCI29451 to TCISutControl for enableGpsInput, setLatitude, setLongitude, setElevation, setPositionalAccuracy, setSpeed, setHeading
+setAccelerationSet4Way, setGpsTime
+- TCI2945: reimported setGpsTime, etc to TCI2945 and marked their indices as deprecated.
+
+Branch: ChangeRequest
+TCI_20180312
+- TCIindication: in IpParameters added protocol
+- TCICommonTypes: in ExceptionType added explicit enumerated values
+- TCI29451: added SetGpsTime, changed tractionControlStatus, antiLockBrakeStatus, stabilityControlStatus, brakeBoostApplied, auxiliaryBrakeStatus to ENUMERATED
+
 TCI_20170814
 - TCIwsm: AddUserService. Added eventHandling field
 - TCIrespondInfo: Ipv6InterfaceInfo: defaultGateway/primaryDns/gatewayMacAddress changed to optional

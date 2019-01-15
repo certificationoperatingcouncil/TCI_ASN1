@@ -1,6 +1,3 @@
---File: TCI29451.asn
---Author: John Liming (john.liming@swri.org)
---Date Modified: 4/14/2017
 --Purpose: Exercise J2945/1 compliant devices by testing the transmission of all possible BSM configurations,
 --         Assist J2945/1 testing by providing easy access to VehicleEventFlags, 
 --         Assist J2945/1 testing by toggling required but test-interfering aspects of the IUT (GPS, Congestion Control, BSM Transmission). 
@@ -14,12 +11,9 @@ DEFINITIONS AUTOMATIC TAGS ::=
 BEGIN
 
 IMPORTS
-Elevation, 
-Longitude, 
-Latitude  FROM IEEE-1609-3-WEE {iso(1) identified-organization(3) ieee(111) standards-association-numbered-series-standards(2) wave-stds(1609) dot3(3) wee(1) version0(0)}
-
 Response, 
 Exception, 
+Time64,
 MsgID FROM TCI-CommonTypes
 
 SetInitialState,
@@ -30,6 +24,16 @@ StartWsmRx,
 StopWsmRx  FROM TCI-wsm
 
 Indication FROM TCI-indication
+
+EnableGpsInput, 
+SetLatitude, 
+SetLongitude, 
+SetElevation, 
+SetPositionalAccuracy, 
+SetSpeed, 
+SetHeading, 
+SetAccelerationSet4Way, 
+SetGpsTime  FROM TCI-SutControl
 ;
 
 TCI29451 ::= CHOICE{
@@ -54,55 +58,55 @@ MESSAGE-ID-AND-TYPE ::= CLASS {
 
 MessageTypes MESSAGE-ID-AND-TYPE ::= {
     { SetInitialState IDENTIFIED BY setInitialState} |
-    { EnableGpsInput IDENTIFIED BY enableGpsInput} |
     { StartBsmTx IDENTIFIED BY startBsmTx} |
     { StopBsmTx IDENTIFIED BY stopBsmTx} |
     { EnableCongestionMitigation IDENTIFIED BY enableCongestionMitigation} |
 
     { SetTemporaryID IDENTIFIED BY setTemporaryID} |
-    { SetLatitude IDENTIFIED BY setLatitude} |
-    { SetLongitude IDENTIFIED BY setLongitude} |
-    { SetElevation IDENTIFIED BY setElevation} |
-    { SetPositionalAccuracy IDENTIFIED BY setPositionalAccuracy} |
     { SetTransmissionState IDENTIFIED BY setTransmissionState} |
-    { SetSpeed IDENTIFIED BY setSpeed} |
-    { SetHeading IDENTIFIED BY setHeading} |
     { SetSteeringWheelAngle IDENTIFIED BY setSteeringWheelAngle} |
-    { SetAccelerationSet4Way IDENTIFIED BY setAccelerationSet4Way} |
     { SetBrakeSystemStatus IDENTIFIED BY setBrakeSystemStatus} |
     { SetVehicleSize IDENTIFIED BY setVehicleSize} |
     { SetExteriorLights IDENTIFIED BY setExteriorLights} |
     { SetVehicleEventFlags IDENTIFIED BY setVehicleEventFlags} |
     { StartBsmRx IDENTIFIED BY startBsmRx} |
-    { StopBsmRx IDENTIFIED BY stopBsmRx}
+    { StopBsmRx IDENTIFIED BY stopBsmRx} |
+
+    { EnableGpsInput IDENTIFIED BY enableGpsInput} |
+    { SetLatitude IDENTIFIED BY setLatitude} |
+    { SetLongitude IDENTIFIED BY setLongitude} |
+    { SetElevation IDENTIFIED BY setElevation} |
+    { SetPositionalAccuracy IDENTIFIED BY setPositionalAccuracy} |
+    { SetSpeed IDENTIFIED BY setSpeed} |
+    { SetHeading IDENTIFIED BY setHeading} |
+    { SetAccelerationSet4Way IDENTIFIED BY setAccelerationSet4Way} |
+    { SetGpsTime IDENTIFIED BY setGpsTime}
 }
 
 setInitialState                     MsgID ::= 1
-enableGpsInput                      MsgID ::= 2
+enableGpsInput                      MsgID ::= 2	    -- deprecated, moved to SutControl
 startBsmTx                          MsgID ::= 3
 stopBsmTx                           MsgID ::= 4
 enableCongestionMitigation          MsgID ::= 5
 
 setTemporaryID                      MsgID ::= 6
-setLatitude                         MsgID ::= 7
-setLongitude                        MsgID ::= 8
-setElevation                        MsgID ::= 9
-setPositionalAccuracy               MsgID ::= 10
+setLatitude                         MsgID ::= 7	    -- deprecated, moved to SutControl
+setLongitude                        MsgID ::= 8	    -- deprecated, moved to SutControl
+setElevation                        MsgID ::= 9	    -- deprecated, moved to SutControl
+setPositionalAccuracy               MsgID ::= 10	-- deprecated, moved to SutControl
 setTransmissionState                MsgID ::= 11
-setSpeed                            MsgID ::= 12
-setHeading                          MsgID ::= 13
+setSpeed                            MsgID ::= 12	-- deprecated, moved to SutControl
+setHeading                          MsgID ::= 13	-- deprecated, moved to SutControl
 setSteeringWheelAngle               MsgID ::= 14
-setAccelerationSet4Way              MsgID ::= 15
+setAccelerationSet4Way              MsgID ::= 15	-- deprecated, moved to SutControl
 setBrakeSystemStatus                MsgID ::= 16
 setVehicleSize                      MsgID ::= 17
 setExteriorLights                   MsgID ::= 18
 setVehicleEventFlags                MsgID ::= 19
 startBsmRx                          MsgID ::= 20
 stopBsmRx                           MsgID ::= 21
+setGpsTime                          MsgID ::= 22	-- deprecated, moved to SutControl
 
-EnableGpsInput ::= BOOLEAN
--- True : use GPS sensor to establish SUT position, speed, heading, etc
--- False: use data provided by TCI messages to set SUT position, speed, heading, etc
 
 StartBsmTx ::= StartWsmTx (WITH COMPONENTS {
     psid  (WITH COMPONENTS {content (32)}),
@@ -131,18 +135,6 @@ EnableCongestionMitigation ::= BOOLEAN
     
 SetTemporaryID ::= OCTET STRING (SIZE(4))
 
-SetLatitude ::= Latitude
-
-SetLongitude ::= Longitude
-
-SetElevation ::= Elevation
-
-SetPositionalAccuracy ::= SEQUENCE{
-    semiMajorAxisAccuracy   INTEGER (0 .. 255),
-    semiMinorAxisAccuracy   INTEGER (0 .. 255),
-    semiMajorAxisOrientation   INTEGER (0 .. 65535)
-}
-    
 SetTransmissionState ::= ENUMERATED {
     neutral         (0),
     park            (1),
@@ -154,18 +146,7 @@ SetTransmissionState ::= ENUMERATED {
     unavailable     (7)
 }
 
-SetSpeed ::= INTEGER (0 .. 8191)
-
-SetHeading ::= INTEGER (0 .. 28800)
-
 SetSteeringWheelAngle ::= INTEGER (-126 .. 127)
-
-SetAccelerationSet4Way ::= SEQUENCE {
-    longAcceleration INTEGER (-2000 .. 2001),
-    latAcceleration INTEGER (-2000 .. 2001),
-    verticalAcceleration INTEGER (-127 .. 127),
-    yawRate INTEGER (-32767 .. 32767)
-}
 
 SetBrakeSystemStatus ::= SEQUENCE {
     brakeAppliedStatus       BIT STRING {
@@ -175,30 +156,30 @@ SetBrakeSystemStatus ::= SEQUENCE {
         rightFront  (3),
         rightRear   (4)
     },
-    tractionControlStatus    BIT STRING {
+    tractionControlStatus    ENUMERATED {
         unavailable (0),
         off         (1),
         on          (2),
         engaged     (3)
     },
-    antiLockBrakeStatus      BIT STRING {
+    antiLockBrakeStatus      ENUMERATED {
         unavailable (0),
         off         (1),
         on          (2),
         engaged     (3)
     },
-    stabilityControlStatus   BIT STRING {
+    stabilityControlStatus   ENUMERATED {
         unavailable (0),
         off         (1),
         on          (2),
         engaged     (3)
     },
-    brakeBoostApplied        BIT STRING {
+    brakeBoostApplied        ENUMERATED {
         unavailable (0),
         off         (1),
         on          (2)
     },
-    auxiliaryBrakeStatus     BIT STRING {
+    auxiliaryBrakeStatus     ENUMERATED {
         unavailable (0),
         off         (1),
         on          (2),
