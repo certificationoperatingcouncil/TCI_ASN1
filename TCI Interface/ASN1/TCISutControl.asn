@@ -103,8 +103,9 @@ SetPositionalAccuracy ::= SEQUENCE{
 }
 
 SetSpeed ::= INTEGER (0 .. 8191)
-
+-- SetSpeed units are the same as in SAEJ2735_2016
 SetHeading ::= INTEGER (0 .. 28800)
+-- SetHeading units are the same as in SAEJ2735_2016
 
 SetAccelerationSet4Way ::= SEQUENCE {
     longAcceleration INTEGER (-2000 .. 2001),
